@@ -1,0 +1,13 @@
+<div class="card-container">
+    Homepage Work!
+    <div class="card" *ngIf="videoList">
+        <ul>
+            <li *ngFor="let video of videoList" (click)="getVideo(video)">{{video}}</li>
+        </ul>
+    </div>
+
+
+    <div class="card" *ngIf="videoLink">
+        <video [src]="videoLink" controls></video>
+    </div>
+</div>
