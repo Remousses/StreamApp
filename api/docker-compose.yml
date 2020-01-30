@@ -1,27 +1,27 @@
 version: "3.4"
 
 services:
-  streaming_app_dev:
-    hostname: streaming_app_dev
-    container_name: streaming_app_dev
+  streaming_api_dev:
+    hostname: streaming_api_dev
+    container_name: streaming_api_dev
     build:
-      context: ./
+      context: ./streaming_api
       dockerfile: Dockerfile_dev
     volumes: 
-      - ./app:/app
+      - ./streaming_api/app:/app
     ports:
-      - 4200:4200
+      - 8080:8080
     stdin_open: true
 
-  streaming_app:
-    hostname: streaming_app
-    container_name: streaming_app
+  streaming_api:
+    hostname: streaming_api
+    container_name: streaming_api
     restart: always
     build:
       context: ./
       dockerfile: Dockerfile
     ports:
-      - 4200
+      - 8443
 
 networks: 
   default:

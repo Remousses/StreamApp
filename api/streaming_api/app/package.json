@@ -1,7 +1,7 @@
 {
   "name": "vue_webpack",
   "version": "1.0.0",
-  "description": "Streaming app project",
+  "description": "Streaming api project",
   "author": "Argentin Rémy",
   "private": true,
   "scripts": {

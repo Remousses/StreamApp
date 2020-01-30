@@ -2,8 +2,18 @@
 // `ng build --prod` replaces `environment.ts` with `environment.prod.ts`.
 // The list of file replacements can be found in `angular.json`.
 
+const domaineName = 'http://localhost:8080/';
+const repositoriesUrl = domaineName + 'repositories';
+const searchVideoUrl =  domaineName + 'searchVideo';
+
+const searchAudioUrl =  domaineName + 'searchAudio';
+
 export const environment = {
-  production: false
+  production: false,
+  repositoriesUrl,
+  domaineName,
+  searchVideoUrl,
+  searchAudioUrl
 };
 
 /*

@@ -2,38 +2,73 @@ import { Component, OnInit } from '@angular/core';
 
 import { StreamingService } from '../../services/streaming/streaming.service';
 
+import { environment } from '../../../environments/environment';
+
 @Component({
   selector: 'app-homepage',
   templateUrl: './homepage.component.html',
   styleUrls: ['./homepage.component.scss']
 })
 export class HomepageComponent implements OnInit {
-  videoList = [];
-  videoLink: string = '';
-  domaineName = 'http://localhost:8080/';
-  musicsUrl = this.domaineName + 'musics/';
-  musicUrl = this.musicsUrl + 'music';
+  currentFolder: string = 'Repositories';
+  returnButtonVisible: boolean = false;
+  list = [];
+  link: string = '';
+
 
   constructor(private streamingService: StreamingService) { }
 
   ngOnInit() {
-    this.getAllVideos().then(videoList => {
-      this.videoList = videoList;
+    this.getAllContent().then(res => {
+      this.list = res.list;
+    }).catch(err => console.log('Error from APIs', err));
+
+  }
+
+  historyBack() {
+    this.currentFolder = this.currentFolder.match(/(.*[\\\/])/)[0];
+    let checkLastCharacter = this.currentFolder.substr(0, this.currentFolder.length - 1);
+
+    if (this.currentFolder.endsWith('/')) {
+      this.currentFolder = checkLastCharacter;
+    }
+
+    this.getAllContent(this.currentFolder).then(res => {
+      this.list = res.list;
     }).catch(err => console.log('Error from APIs', err));
   }
 
-  getAllVideos(): Promise<any> {
+  getAllContent(repo?: string): Promise<any> {
     return new Promise((resolve, reject) => {
-      this.streamingService.getAllVideos().subscribe(res => {
-        console.log('res', res)
-        resolve(res.videoList);
+      this.streamingService.getAllContent(repo).subscribe(res => {
+        resolve(res);
       }, err => {
         reject(err);
       });
     });
   }
+  getContent(content: string) {
+    let repo = this.currentFolder + '/' + content;
 
-  getVideo(video: string){
-    this.videoLink = this.musicUrl + '?name=' + video + '&searchVideo=true'
+    if(!this.returnButtonVisible) {
+      this.returnButtonVisible = true;
+    }
+
+    switch (content.split('.')[1]) {
+      case 'mp3':
+        this.link = environment.searchAudioUrl + '?name=' + content + '&path=' + repo;
+        break;
+
+      case 'mp4':
+        this.link = environment.searchVideoUrl + '?name=' + content + '&path=' + repo;
+        break;
+
+      default:
+        this.getAllContent(repo).then(res => {
+          this.list = res.list;
+          this.currentFolder = res.path;
+        }).catch(err => console.log('Error from APIs', err));
+        break;
+    }
   }
 }

@@ -1,13 +1,25 @@
 <div class="card-container">
-    Homepage Work!
-    <div class="card" *ngIf="videoList">
+    <span>{{ currentFolder }}</span><button *ngIf="returnButtonVisible" (click)="historyBack()">< {{ returnButton }}</button>
+    <div class="card" *ngIf="list">
         <ul>
-            <li *ngFor="let video of videoList" (click)="getVideo(video)">{{video}}</li>
+            <ng-container *ngFor="let item of list">
+                <li (click)="getContent(item)">{{ item | customString }}</li>
+            </ng-container>
         </ul>
     </div>
 
 
-    <div class="card" *ngIf="videoLink">
-        <video [src]="videoLink" controls></video>
-    </div>
+    <ng-container *ngIf="link">
+        <div class="card" *ngIf="link.includes('mp4')">
+            <video [src]="link" controls></video>
+        </div>
+
+        <div class="card" *ngIf="link.includes('mp3')">
+            <audio controls>
+                <source [src]="link" type="audio/mp3">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
+    </ng-container>
+
 </div>

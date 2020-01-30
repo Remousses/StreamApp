@@ -8,10 +8,13 @@ import { HomepageComponent } from './components/homepage/homepage.component';
 
 import { StreamingService } from './services/streaming/streaming.service';
 
+import { CustomString } from './pipes/customString.pipe';
+
 @NgModule({
   declarations: [
     AppComponent,
-    HomepageComponent
+    HomepageComponent,
+    CustomString
   ],
   imports: [
     BrowserModule,
