@@ -15,6 +15,7 @@
 **/e2e
 
 **.env
+**/Repositories
 
 # profiling files
 chrome-profiler-events*.json

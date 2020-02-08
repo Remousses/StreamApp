@@ -1,0 +1,18 @@
+<div fxLayout="row" align="center"
+    *ngIf="currentFolder === 'Repositories' || currentFolder.includes('Repositories/Mangas')">
+    <mat-form-field>
+        <mat-select [(ngModel)]="txtManga">
+            <mat-option *ngFor="let manga of allMangas" [value]="manga.value" placeholder="Selectionner un manga">
+                {{manga.name}}
+            </mat-option>
+        </mat-select>
+    </mat-form-field>
+    <input matInput [(ngModel)]="txtMangaChapter" placeholder="Rechercher un chapitre">
+    <button *ngIf="txtManga && txtMangaChapter" (click)="searchManga(txtManga, txtMangaChapter)">
+        Rechercher
+    </button>
+    <button *ngIf="timer === 0" (click)="timer = 10;">Rafraîchir</button>
+</div>
+
+
+what {{currentFolder}}

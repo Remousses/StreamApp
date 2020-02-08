@@ -5,15 +5,16 @@
 const domaineName = 'http://localhost:8080/';
 const repositoriesUrl = domaineName + 'repositories';
 const searchVideoUrl =  domaineName + 'searchVideo';
-
 const searchAudioUrl =  domaineName + 'searchAudio';
+const searchImageUrl =  domaineName + 'searchImage';
 
 export const environment = {
   production: false,
   repositoriesUrl,
   domaineName,
   searchVideoUrl,
-  searchAudioUrl
+  searchAudioUrl,
+  searchImageUrl
 };
 
 /*

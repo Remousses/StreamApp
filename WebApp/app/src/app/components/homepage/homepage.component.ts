@@ -1,8 +1,8 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 
 import { StreamingService } from '../../services/streaming/streaming.service';
 
-import { environment } from '../../../environments/environment';
+import { HttpParams } from '@angular/common/http';
 
 @Component({
   selector: 'app-homepage',
@@ -11,64 +11,47 @@ import { environment } from '../../../environments/environment';
 })
 export class HomepageComponent implements OnInit {
   currentFolder: string = 'Repositories';
-  returnButtonVisible: boolean = false;
-  list = [];
   link: string = '';
-
-
+  image: string = '';
+  
   constructor(private streamingService: StreamingService) { }
 
   ngOnInit() {
-    this.getAllContent().then(res => {
-      this.list = res.list;
-    }).catch(err => console.log('Error from APIs', err));
-
+    
   }
 
-  historyBack() {
-    this.currentFolder = this.currentFolder.match(/(.*[\\\/])/)[0];
-    let checkLastCharacter = this.currentFolder.substr(0, this.currentFolder.length - 1);
-
-    if (this.currentFolder.endsWith('/')) {
-      this.currentFolder = checkLastCharacter;
-    }
-
-    this.getAllContent(this.currentFolder).then(res => {
-      this.list = res.list;
-    }).catch(err => console.log('Error from APIs', err));
+  changeCurrentFolder(value: string){
+    this.currentFolder = value;
   }
 
-  getAllContent(repo?: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.streamingService.getAllContent(repo).subscribe(res => {
-        resolve(res);
-      }, err => {
-        reject(err);
-      });
-    });
+  changeLink(value: string){
+    this.link = value;
   }
-  getContent(content: string) {
-    let repo = this.currentFolder + '/' + content;
 
-    if(!this.returnButtonVisible) {
-      this.returnButtonVisible = true;
-    }
-
-    switch (content.split('.')[1]) {
-      case 'mp3':
-        this.link = environment.searchAudioUrl + '?name=' + content + '&path=' + repo;
-        break;
-
-      case 'mp4':
-        this.link = environment.searchVideoUrl + '?name=' + content + '&path=' + repo;
-        break;
-
-      default:
-        this.getAllContent(repo).then(res => {
-          this.list = res.list;
-          this.currentFolder = res.path;
-        }).catch(err => console.log('Error from APIs', err));
-        break;
-    }
+  changeImage(value: string){
+    this.image = value;
   }
+
+  // upload(fileName: string, fileContent: string): void {
+  //   this.streamingService.upload(fileName, fileContent).subscribe(res => {
+
+  //     // console.log('Execution du skipt shell en cours');
+  //     // Faire un refresh 
+  //   }, err => {
+  //     console.log(err);
+  //   });
+
+
+  //   .subscribe(res  => {
+  //     this.fileList.push(fileName);
+  //     this.fileList$.next(this.fileList);
+  //   });
+  // }
+
+  // public remove(fileName): void {
+  //   this.streamingService.http.delete('/files/${fileName}').subscribe(() => {
+  //     this.fileList.splice(this.fileList.findIndex(name => name === fileName), 1);
+  //     this.fileList$.next(this.fileList);
+  //   });
+  // }
 }

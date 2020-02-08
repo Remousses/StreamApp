@@ -1,0 +1,28 @@
+zefzef {{link}}
+
+grsqgzf {{image}}
+
+<div *ngIf="link" fxLayout="row" align="center">
+    <div class="card" *ngIf="link.includes('mp4')">
+        <video [src]="link" controls></video>
+    </div>
+
+    <div class="card" *ngIf="link.includes('mp3')">
+        <audio controls>
+            <source [src]="link" type="audio/mp3">
+            Your browser does not support the audio element.
+        </audio>
+    </div>
+</div>
+
+<div *ngIf="image" class="container-image" fxLayout="row" align="center">
+    <div class="card-image-text-left">
+        <
+    </div>
+    <div class="card-image">
+        <img height="700px" [src]="image">
+    </div>
+    <div class="card-image-text-right">
+       >
+    </div>
+</div>

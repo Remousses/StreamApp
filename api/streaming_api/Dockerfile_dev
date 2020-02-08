@@ -10,4 +10,4 @@ RUN wget https://github.com/robbyrussell/oh-my-zsh/raw/master/tools/install.sh -
 
 WORKDIR /app
 
-RUN npm i -g nodemon
+RUN npm i -g nodemon && mkdir -p app/Repositories

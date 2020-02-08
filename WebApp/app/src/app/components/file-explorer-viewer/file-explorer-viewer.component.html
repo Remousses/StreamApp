@@ -1,0 +1,14 @@
+zefzef {{link}}
+
+grsqgzf {{image}}
+<div layout="row" layout-align="space-between">
+    <span>{{ currentFolder | customCurrentFolder | customString }}</span>
+    <button *ngIf="returnButtonVisible && currentFolder != 'Repositories'" (click)="historyBack()">
+        Retour</button> </div>
+<div class="card" *ngIf="list" fxLayout="column" align="start">
+    <ul>
+        <ng-container *ngFor="let item of list">
+            <li (click)="getContent(item)">{{ item | customString }}</li>
+        </ng-container>
+    </ul>
+</div>

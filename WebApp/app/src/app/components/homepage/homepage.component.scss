@@ -1,0 +1,22 @@
+.container-image {
+    width: 100%;
+}
+
+.card-image {
+    margin: 0 auto;
+}
+
+.card-image-text-right {
+    float: right;
+    height: 700px;
+    margin-top: -700px;
+    line-height: 700px;
+    width: 20px;
+}
+
+.card-image-text-left {
+    float: left;
+    height: 700px;
+    line-height: 700px;
+    width: 20px;
+}
