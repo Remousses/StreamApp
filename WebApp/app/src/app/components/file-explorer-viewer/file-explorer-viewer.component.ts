@@ -3,27 +3,68 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 import { StreamingService } from 'src/app/services/streaming/streaming.service';
 import { environment } from 'src/environments/environment';
 
+import { FileElement } from 'src/app/model/file-element';
+import { MatDialog } from '@angular/material';
+import { NewFolderDialogComponent } from 'src/app/modals/new-folder-dialog/new-folder-dialog.component';
+import { RenameDialogComponent } from 'src/app/modals/rename-dialog/rename-dialog.component';
+import { NewFileDialogComponent } from 'src/app/modals/new-file-dialog/new-file-dialog.component';
+
 @Component({
   selector: 'app-file-explorer-viewer',
   templateUrl: './file-explorer-viewer.component.html',
   styleUrls: ['./file-explorer-viewer.component.scss']
 })
 export class FileExplorerViewerComponent implements OnInit {
+  @Input() fileElements: FileElement[]
+  @Input() path: string;
   @Input() currentFolder;
   @Input() link;
   @Input() image;
+  list = [];
+
   @Output() currentFolderDataChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() linkDataChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() imageDataChange: EventEmitter<string> = new EventEmitter<string>();
-  returnButtonVisible: boolean = false;
-  list = [];
+  @Output() folderAdded = new EventEmitter<{ name: string }>()
+  @Output() elementRemoved = new EventEmitter<FileElement>()
+  @Output() elementRenamed = new EventEmitter<FileElement>()
 
-  constructor(private streamingService: StreamingService) { }
+  constructor(private streamingService: StreamingService, public dialog: MatDialog) { }
 
   ngOnInit() {
-    this.getAllContent().then(res => {
-      this.list = res.list;
-    }).catch(err => console.log('Error from APIs', err));
+    this.getAllContentByRepo(localStorage.getItem('currentFolder') || this.currentFolder);
+  }
+
+  deleteElement(element: FileElement) {
+    this.elementRemoved.emit(element);
+  }
+
+  openNewFolderDialog() {
+    let dialogRef = this.dialog.open(NewFolderDialogComponent);
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        this.folderAdded.emit({ name: res });
+      }
+    });
+  }
+
+  openNewFileDialog() {
+    let dialogRef = this.dialog.open(NewFileDialogComponent);
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        this.folderAdded.emit({ name: res });
+      }
+    });
+  }
+
+  openRenameDialog(element: FileElement) {
+    let dialogRef = this.dialog.open(RenameDialogComponent);
+    dialogRef.afterClosed().subscribe(res => {
+      if (res) {
+        element.name = res;
+        this.elementRenamed.emit(element);
+      }
+    });
   }
 
   historyBack() {
@@ -34,29 +75,21 @@ export class FileExplorerViewerComponent implements OnInit {
       this.setCurrentFolder(checkLastCharacter);
     }
 
-    this.getAllContent(this.currentFolder).then(res => {
-      this.list = res.list;
-    }).catch(err => console.log('Error from APIs', err));
-  }
-
-  getAllContent(repo?: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.streamingService.getAllContent(repo).subscribe(res => {
-        resolve(res);
-      }, err => {
-        reject(err);
-      });
-    });
+    
+    this.getAllContentByRepo(this.currentFolder);
   }
 
   getContent(content: string) {
     let repo = this.currentFolder + '/' + content;
+
+    let array = repo.split('/');
+    
+    if(array[array.length - 2] === content) {
+      repo = this.currentFolder;
+    }
+
     this.setLink('');
     this.setImage('');
-
-    if (!this.returnButtonVisible) {
-      this.returnButtonVisible = true;
-    }
 
     switch (content.split('.')[1]) {
       case 'jpg':
@@ -77,12 +110,19 @@ export class FileExplorerViewerComponent implements OnInit {
         break;
 
       default:
-        this.getAllContent(repo).then(res => {
-          this.list = res.list;
-          this.setCurrentFolder(res.path);
-        }).catch(err => console.log('Error from APIs', err));
+        console.log("getContent");
+        this.getAllContentByRepo(repo);
         break;
     }
+  }
+
+  private getAllContentByRepo(repo: string) {
+    this.streamingService.getAllContent(repo).subscribe(res => {
+      this.list = res.list;
+      this.setCurrentFolder(res.path);
+      this.setLocaleStorage();
+    },
+    err => console.log('Error from APIs', err));
   }
 
   getImage(repo: string): Promise<any> {
@@ -95,18 +135,33 @@ export class FileExplorerViewerComponent implements OnInit {
     });
   }
 
-  setCurrentFolder(value: string) {
-    this.currentFolder = value;    
-    this.currentFolderDataChange.emit(this.currentFolder)
+  private setCurrentFolder(value: string) {
+    this.currentFolder = value;
+    this.currentFolderDataChange.emit(value);
   }
 
-  setLink(value: string) {
+  private setLink(value: string) {
     this.link = value;
-    this.linkDataChange.emit(this.link)
+    this.linkDataChange.emit(value);
   }
 
-  setImage(value: string) {
+  private setImage(value: string) {
     this.image = value;
-    this.imageDataChange.emit(this.image)
+    this.imageDataChange.emit(value);
+  }
+
+  private setLocaleStorage(value?: boolean) {
+    if (!localStorage.getItem('currentFolder')) {
+      localStorage.setItem('currentFolder', this.currentFolder);
+    } else {
+        if(value){
+          this.currentFolder = localStorage.getItem('currentFolder');
+          localStorage.setItem('currentFolder', this.currentFolder);
+          this.getAllContentByRepo(localStorage.getItem('currentFolder'));
+        } else {
+          localStorage.setItem('currentFolder', this.currentFolder);
+          this.currentFolder = localStorage.getItem('currentFolder');
+        }
+    }
   }
 }

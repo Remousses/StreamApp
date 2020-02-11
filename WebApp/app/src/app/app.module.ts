@@ -2,21 +2,33 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { HttpClientModule } from '@angular/common/http';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { MatSliderModule, MatInputModule, MatSelectModule } from '@angular/material';
+import { CommonModule } from '@angular/common'
+import {
+  MatSliderModule, MatInputModule, MatSelectModule,
+  MatIconModule, MatFormFieldModule, MatToolbarModule,
+  MatGridListModule, MatMenuModule,
+  MatDialogModule, MatButtonModule, MatCardModule
+} from '@angular/material';
+
+import { FlexLayoutModule } from "@angular/flex-layout";
+
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HomepageComponent } from './components/homepage/homepage.component';
-
-import { StreamingService } from './services/streaming/streaming.service';
-
-import { CustomString } from './pipes/customString.pipe';
 import { CustomCurrentFolder } from './pipes/customCurrentFolder.pipe';
-import { UploadFileComponent } from './components/upload-file/upload-file.component';
 import { FileExplorerViewerComponent } from './components/file-explorer-viewer/file-explorer-viewer.component';
 import { SearchMangasComponent } from './components/search-mangas/search-mangas.component';
 import { ContentViewerComponent } from './components/content-viewer/content-viewer.component';
+import { NewFolderDialogComponent } from './modals/new-folder-dialog/new-folder-dialog.component';
+import { RenameDialogComponent } from './modals/rename-dialog/rename-dialog.component';
+
+import { CustomString } from './pipes/customString.pipe';
+
+import { StreamingService } from './services/streaming/streaming.service';
+import { UploadFileService } from './services/upload-file/upload-file.service';
+import { NewFileDialogComponent } from './modals/new-file-dialog/new-file-dialog.component';
 
 @NgModule({
   declarations: [
@@ -24,10 +36,12 @@ import { ContentViewerComponent } from './components/content-viewer/content-view
     HomepageComponent,
     CustomString,
     CustomCurrentFolder,
-    UploadFileComponent,
     FileExplorerViewerComponent,
     SearchMangasComponent,
-    ContentViewerComponent
+    ContentViewerComponent,
+    NewFolderDialogComponent,
+    RenameDialogComponent,
+    NewFileDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -38,9 +52,20 @@ import { ContentViewerComponent } from './components/content-viewer/content-view
     ReactiveFormsModule,
     MatSliderModule,
     MatInputModule,
-    MatSelectModule
+    MatSelectModule,
+    MatIconModule,
+    MatFormFieldModule,
+    CommonModule,
+    MatToolbarModule,
+    FlexLayoutModule,
+    MatGridListModule,
+    MatMenuModule,
+    MatDialogModule,
+    MatButtonModule,
+    MatCardModule
   ],
-  providers: [StreamingService],
+  providers: [StreamingService, UploadFileService],
+  entryComponents: [NewFolderDialogComponent, RenameDialogComponent, NewFileDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

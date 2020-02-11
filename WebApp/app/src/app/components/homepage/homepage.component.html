@@ -1,9 +1,14 @@
-<div class="card-container" fxLayout="row">
-    <app-upload-file></app-upload-file>
-
-    <app-file-explorer-viewer [currentFolder]="currentFolder" (currentFolderDataChange)="changeCurrentFolder($event)" [link]="link" (linkDataChange)="changeLink($event)" [image]="image" (imageDataChange)="changeImage($event)"></app-file-explorer-viewer>
-
-    <app-search-mangas [currentFolder]="currentFolder"></app-search-mangas>
-    
-    <app-content-viewer [link]="link" [image]="image"></app-content-viewer>
+<div style="height: 100%; box-sizing: border-box;">
+  <mat-card style="height: 100%; box-sizing: border-box; padding:0">
+    <app-file-explorer-viewer [fileElements]="fileElements | async" (folderAdded)="addFolder($event)"
+      (elementRemoved)="removeElement($event)" (navigatedDown)="navigateToFolder($event)"
+      (elementRenamed)="renameElement($event)" [currentFolder]="currentFolder"
+      (currentFolderDataChange)="changeCurrentFolder($event)" [link]="link" (linkDataChange)="changeLink($event)"
+      [image]="image" (imageDataChange)="changeImage($event)">
+    </app-file-explorer-viewer>
+  </mat-card>
 </div>
+
+<app-search-mangas [currentFolder]="currentFolder"></app-search-mangas>
+
+<app-content-viewer [link]="link" [image]="image"></app-content-viewer>

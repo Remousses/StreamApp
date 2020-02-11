@@ -1,14 +1,13 @@
 import { Component, OnInit } from '@angular/core';
+import { StreamingService } from 'src/app/services/streaming/streaming.service';
 import { FormBuilder, Validators } from '@angular/forms';
 
-import { StreamingService } from '../../services/streaming/streaming.service';
-
 @Component({
-  selector: 'app-upload-file',
-  templateUrl: './upload-file.component.html',
-  styleUrls: ['./upload-file.component.scss']
+  selector: 'app-new-file-dialog',
+  templateUrl: './new-file-dialog.component.html',
+  styleUrls: ['./new-file-dialog.component.scss']
 })
-export class UploadFileComponent implements OnInit {
+export class NewFileDialogComponent implements OnInit {
   uploadFileName: string = '';
   uploadForm = this.formBuilder.group({
     file: [null, Validators.required]
