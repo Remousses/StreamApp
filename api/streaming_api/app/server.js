@@ -10,11 +10,6 @@ const fs = require('fs'),
 
 app.use(cors());
 
-app.get('/repositories', (req, res) => {
-    console.log('Récupération de tous le contenu du dossier Repositories');
-    getAllContent(res, 'Repositories');
-});
-
 app.get('/content', [
     check('path').not().isEmpty().withMessage('Ce champ est obligatoire')
 ], (req, res) => {
@@ -33,8 +28,6 @@ app.get('/content', [
 
     getAllContent(res, repo);
 });
-
-// videos/video/searchVideo?name=Marshmello-Together.mp4
 
 app.get('/searchVideo', [
     check('name').not().isEmpty().withMessage('Ce champ est obligatoire'),

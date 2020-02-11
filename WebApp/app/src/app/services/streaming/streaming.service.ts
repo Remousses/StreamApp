@@ -13,19 +13,12 @@ export class StreamingService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getImage(repo){
+  getImage(repo: string){
     return this.httpClient.get<any>(environment.searchImageUrl + '?path=' + repo);
   }
 
-  getAllContent(repo?: string){
-    let url = '';
-    if (!repo) {
-      url = 'repositories';
-    } else {
-      url = 'content?path=' + repo;
-    }
-
-    return this.httpClient.get<any>(environment.domaineName + url);
+  getAllContent(repo: string){
+    return this.httpClient.get<any>(environment.domaineName + 'content?path=' + repo);
   }
   
   searchManga(name: string, chapter: string){

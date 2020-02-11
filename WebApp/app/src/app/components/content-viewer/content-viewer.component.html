@@ -1,7 +1,3 @@
-zefzef {{link}}
-
-grsqgzf {{image}}
-
 <div *ngIf="link" fxLayout="row" align="center">
     <div class="card" *ngIf="link.includes('mp4')">
         <video [src]="link" controls></video>
@@ -17,12 +13,12 @@ grsqgzf {{image}}
 
 <div *ngIf="image" class="container-image" fxLayout="row" align="center">
     <div class="card-image-text-left">
-        <
+        <mat-icon class="card-image-arrow">keyboard_arrow_left</mat-icon>
     </div>
     <div class="card-image">
         <img height="700px" [src]="image">
     </div>
     <div class="card-image-text-right">
-       >
+        <mat-icon class="card-image-arrow">keyboard_arrow_right</mat-icon>
     </div>
 </div>
