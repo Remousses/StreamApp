@@ -1,8 +1,9 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Mangas } from 'src/app/utils/mangas';
 
 import { StreamingService } from '../../services/streaming/streaming.service';
+import { LoaderService } from 'src/app/services/loader/loader.service';
 
 @Component({
   selector: 'app-search-mangas',
@@ -11,12 +12,15 @@ import { StreamingService } from '../../services/streaming/streaming.service';
 })
 export class SearchMangasComponent implements OnInit {
   @Input() currentFolder;
-  timer: number = 10;
+
+  @Output() refreshView: EventEmitter<string> = new EventEmitter<string>();
+
+  searchMangaSuccess: false;
   txtManga: string = '';
   txtMangaChapter: string = '';
   allMangas = Mangas;
 
-  constructor(private streamingService: StreamingService) { }
+  constructor(private streamingService: StreamingService, private loaderService: LoaderService) { }
 
   ngOnInit() {
     this.allMangas.forEach(manga => {
@@ -24,22 +28,27 @@ export class SearchMangasComponent implements OnInit {
     });
   }
 
-  searchManga(name: string, chapter: string) {
-    this.streamingService.searchManga(name, chapter).subscribe(res => {
-      console.log('Execution du skipt shell en cours');
-    }, err => {
-      console.log(err);
-    });
-
-    this.timer = 10;
-    const interval = setInterval(() => {
-      this.timer--
-
-      if (this.timer === 0) {
-        clearInterval(interval);
+  searchManga(name: string, chapter: string):void {
+    this.loaderService.setSpinnerState(true);
+    new Promise<any>((resolve, reject) => {
+      this.streamingService.searchManga(name, chapter).subscribe(res => {
+        this.loaderService.setSpinnerState(false);
+        resolve(true);
+      }, err => {
+        this.loaderService.setSpinnerState(false);
+        reject(err);
+      });
+    }).then(res => {
+      if(res){
+        console.log('Execution du skipt shell terminée');
+        this.refresh();
+        this.searchMangaSuccess = res;
       }
+    }).catch(err => console.log('Error from APIs', err));
+  }
 
-      console.log("this.timer", this.timer);
-    }, 1000);
+  refresh(){
+    this.searchMangaSuccess = false;
+    this.refreshView.emit();
   }
 }

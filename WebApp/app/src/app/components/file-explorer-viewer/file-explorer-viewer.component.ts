@@ -8,6 +8,7 @@ import { MatDialog } from '@angular/material';
 import { NewFolderDialogComponent } from 'src/app/modals/new-folder-dialog/new-folder-dialog.component';
 import { RenameDialogComponent } from 'src/app/modals/rename-dialog/rename-dialog.component';
 import { NewFileDialogComponent } from 'src/app/modals/new-file-dialog/new-file-dialog.component';
+import { LoaderService } from 'src/app/services/loader/loader.service';
 
 @Component({
   selector: 'app-file-explorer-viewer',
@@ -15,21 +16,21 @@ import { NewFileDialogComponent } from 'src/app/modals/new-file-dialog/new-file-
   styleUrls: ['./file-explorer-viewer.component.scss']
 })
 export class FileExplorerViewerComponent implements OnInit {
+  link: string = '';
+  currentFolder: string = 'Repositories';
+
   @Input() fileElements: FileElement[]
   @Input() path: string;
-  @Input() currentFolder;
-  @Input() link;
-  @Input() image;
-  list = [];
+  @Input() imageJSON;
+  @Input() contentList;
 
-  @Output() currentFolderDataChange: EventEmitter<string> = new EventEmitter<string>();
-  @Output() linkDataChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() imageDataChange: EventEmitter<string> = new EventEmitter<string>();
+  @Output() contentListDataChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() folderAdded = new EventEmitter<{ name: string }>()
   @Output() elementRemoved = new EventEmitter<FileElement>()
   @Output() elementRenamed = new EventEmitter<FileElement>()
 
-  constructor(private streamingService: StreamingService, public dialog: MatDialog) { }
+  constructor(private streamingService: StreamingService, public dialog: MatDialog, private loaderService: LoaderService) { }
 
   ngOnInit() {
     this.getAllContentByRepo(localStorage.getItem('currentFolder') || this.currentFolder);
@@ -75,29 +76,35 @@ export class FileExplorerViewerComponent implements OnInit {
       this.setCurrentFolder(checkLastCharacter);
     }
 
-    
     this.getAllContentByRepo(this.currentFolder);
+  }
+
+  private getImage(repo: string): Promise<any> {
+    this.loaderService.setSpinnerState(true);
+    
+    return new Promise((resolve, reject) => {
+      this.streamingService.getImage(repo).subscribe(res => {
+        this.loaderService.setSpinnerState(false);
+        resolve(res);
+      }, err => {
+        this.loaderService.setSpinnerState(false);
+        reject(err);
+      });
+    });
   }
 
   getContent(content: string) {
     let repo = this.currentFolder + '/' + content;
 
-    let array = repo.split('/');
-    
-    if(array[array.length - 2] === content) {
-      repo = this.currentFolder;
-    }
-
     this.setLink('');
-    this.setImage('');
+    this.setImage('', '');
 
     switch (content.split('.')[1]) {
       case 'jpg':
       case 'jpeg':
       case 'png':
-
         this.getImage(repo).then(res => {
-          this.setImage(res.image);
+          this.setImage(content, res.image);
         }).catch(err => console.log('Error from APIs', err));
         break;
 
@@ -110,58 +117,65 @@ export class FileExplorerViewerComponent implements OnInit {
         break;
 
       default:
-        console.log("getContent");
         this.getAllContentByRepo(repo);
         break;
     }
   }
 
-  private getAllContentByRepo(repo: string) {
+  getAllContentByRepo(repo: string) {
+    this.loaderService.setSpinnerState(true);
     this.streamingService.getAllContent(repo).subscribe(res => {
-      this.list = res.list;
+      this.contentList = res.list;
+      this.contentListDataChange.emit(this.contentList);
       this.setCurrentFolder(res.path);
       this.setLocaleStorage();
+      this.loaderService.setSpinnerState(false);
     },
-    err => console.log('Error from APIs', err));
-  }
-
-  getImage(repo: string): Promise<any> {
-    return new Promise((resolve, reject) => {
-      this.streamingService.getImage(repo).subscribe(res => {
-        resolve(res);
-      }, err => {
-        reject(err);
-      });
-    });
-  }
+      err => {
+        console.log('Error from APIs, reset by Repositories', err);
+        this.streamingService.getAllContent('Repositories').subscribe(res => {
+          this.contentList = res.list;
+          this.contentListDataChange.emit(this.contentList);
+          this.setCurrentFolder(res.path);
+          this.setLocaleStorage();
+          this.loaderService.setSpinnerState(false);
+        },
+          err => {
+            this.loaderService.setSpinnerState(false);
+            console.log('Error from APIs', err)
+          }
+      );
+  });
+}
 
   private setCurrentFolder(value: string) {
-    this.currentFolder = value;
-    this.currentFolderDataChange.emit(value);
-  }
+  this.currentFolder = value;
+}
 
   private setLink(value: string) {
-    this.link = value;
-    this.linkDataChange.emit(value);
-  }
+  this.link = value;
+}
 
-  private setImage(value: string) {
-    this.image = value;
-    this.imageDataChange.emit(value);
-  }
+  private setImage(name: string, base64: string) {
+  this.imageJSON = {
+    name,
+    base64
+  };
+  this.imageDataChange.emit(this.imageJSON);
+}
 
-  private setLocaleStorage(value?: boolean) {
-    if (!localStorage.getItem('currentFolder')) {
+  private setLocaleStorage(value ?: boolean) {
+  if (!localStorage.getItem('currentFolder')) {
+    localStorage.setItem('currentFolder', this.currentFolder);
+  } else {
+    if (value) {
+      this.currentFolder = localStorage.getItem('currentFolder');
       localStorage.setItem('currentFolder', this.currentFolder);
+      this.getAllContentByRepo(localStorage.getItem('currentFolder'));
     } else {
-        if(value){
-          this.currentFolder = localStorage.getItem('currentFolder');
-          localStorage.setItem('currentFolder', this.currentFolder);
-          this.getAllContentByRepo(localStorage.getItem('currentFolder'));
-        } else {
-          localStorage.setItem('currentFolder', this.currentFolder);
-          this.currentFolder = localStorage.getItem('currentFolder');
-        }
+      localStorage.setItem('currentFolder', this.currentFolder);
+      this.currentFolder = localStorage.getItem('currentFolder');
     }
   }
+}
 }

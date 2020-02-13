@@ -1,4 +1,4 @@
-<div *ngIf="link" fxLayout="row" align="center">
+<div *ngIf="link" fxLayout="row">
     <div class="card" *ngIf="link.includes('mp4')">
         <video [src]="link" controls></video>
     </div>
@@ -11,14 +11,15 @@
     </div>
 </div>
 
-<div *ngIf="image" class="container-image" fxLayout="row" align="center">
+
+<div *ngIf="imageJSON.base64" class="container-image" fxLayout="row">
     <div class="card-image-text-left">
-        <mat-icon class="card-image-arrow">keyboard_arrow_left</mat-icon>
+        <mat-icon class="card-image-arrow" (click)="getImage(imageLeft)">keyboard_arrow_left</mat-icon>
     </div>
     <div class="card-image">
-        <img height="700px" [src]="image">
+        <img height="700px" [src]="imageJSON.base64" (click)="getImage(imageRight)">
     </div>
     <div class="card-image-text-right">
-        <mat-icon class="card-image-arrow">keyboard_arrow_right</mat-icon>
+        <mat-icon class="card-image-arrow" (click)="getImage(imageRight)">keyboard_arrow_right</mat-icon>
     </div>
 </div>

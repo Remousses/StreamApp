@@ -11,5 +11,5 @@
     <button *ngIf="txtManga && txtMangaChapter" (click)="searchManga(txtManga, txtMangaChapter)">
         Rechercher
     </button>
-    <button *ngIf="timer === 0" (click)="timer = 10;">Rafraîchir</button>
+    <button *ngIf="searchMangaSuccess" (click)="refresh()">Rafraîchir</button>
 </div>

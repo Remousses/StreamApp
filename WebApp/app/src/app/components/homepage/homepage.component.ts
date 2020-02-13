@@ -1,11 +1,10 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
-import { StreamingService } from '../../services/streaming/streaming.service';
-
-import { HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { FileElement } from 'src/app/model/file-element';
 import { UploadFileService } from 'src/app/services/upload-file/upload-file.service';
+import { StreamingService } from 'src/app/services/streaming/streaming.service';
+import { LoaderService } from 'src/app/services/loader/loader.service';
 
 @Component({
   selector: 'app-homepage',
@@ -13,21 +12,29 @@ import { UploadFileService } from 'src/app/services/upload-file/upload-file.serv
   styleUrls: ['./homepage.component.scss']
 })
 export class HomepageComponent implements OnInit {
-  currentFolder: string = 'Repositories';
-  link: string = '';
-  image: string = '';
+  imageJSON: Object = {
+    name: '',
+    base64: ''
+  };
+  contentList: Array<string> = [];
+  imageLeft: string = '';
+  imageRight: string = '';
 
   fileElements: Observable<FileElement[]>;
   currentRoot: FileElement;
 
-  constructor(private streamingService: StreamingService, private uploadFileService: UploadFileService) { }
+  constructor(private uploadFileService: UploadFileService, public loaderService: LoaderService) { }
 
   ngOnInit() {
-
   }
 
   addFolder(folder: { name: string }) {
-    this.uploadFileService.add({ isFolder: true, name: folder.name, parent: this.currentRoot ? this.currentRoot.id : 'root' });
+    let element: FileElement = {
+      isFolder: true,
+      name: folder.name,
+      parent: this.currentRoot ? this.currentRoot.id : 'root'
+    };
+    this.uploadFileService.add(element);
     this.updateFileElementQuery();
   }
 
@@ -48,19 +55,34 @@ export class HomepageComponent implements OnInit {
   navigateToFolder(element: FileElement) {
     this.currentRoot = element;
     this.updateFileElementQuery();
-    // this.currentFolder = this.pushToPath(this.currentFolder, element.name);
   }
 
-  changeCurrentFolder(value: string) {
-    this.currentFolder = value;
+  changeContentList(value: Array<string>) {
+    this.contentList = value;
   }
 
-  changeLink(value: string) {
-    this.link = value;
-  }
+  changeImage(value: { name: string, base64: string }) {
+    this.imageJSON = {
+      name: value.name,
+      base64: value.base64
+    };
+    this.imageLeft = '';
+    this.imageRight = '';
 
-  changeImage(value: string) {
-    this.image = value;
+    this.contentList.forEach((element, key) => {
+      if (value.name === element) {
+        let less = key - 1;
+        let more = key + 1;
+        if (key === 0) {
+          this.imageRight = this.contentList[more];
+        } else if (key === this.contentList.length - 1) {
+          this.imageLeft = (this.contentList[less]);
+        } else {
+          this.imageRight = this.contentList[more];
+          this.imageLeft = this.contentList[less];
+        }
+      }
+    });
   }
 
   // upload(fileName: string, fileContent: string): void {

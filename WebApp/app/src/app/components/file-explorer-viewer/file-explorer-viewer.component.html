@@ -15,7 +15,7 @@
 <div class="container" fxFlex fxLayout="row" fxLayoutAlign="space-between stretch">
   <div class="content" fxFlex fxLayout="row">
     <mat-grid-list cols="8" rowHeight="100px" fxFlex>
-      <mat-grid-tile *ngFor="let item of list" class="file-or-folder">
+      <mat-grid-tile *ngFor="let item of contentList" class="file-or-folder">
         <div fxLayout="column" fxLayoutAlign="space-between center text-truncate" (click)="getContent(item)"
           >
           <mat-icon *ngIf="!item.split('.')[1]" color="primary" class="file-or-folder-icon pointer">
@@ -25,21 +25,12 @@
             insert_drive_file
           </mat-icon>
           
-          <span>{{ item | customString }}</span>
+          <div class="tooltip">
+            {{ item | customString | customStringThreeDots }}
+            <span class="tooltiptext">{{ item | customString }}</span>
+          </div>
         </div>
       </mat-grid-tile>
     </mat-grid-list>
   </div>
 </div>
-
-<!-- <div layout="row" layout-align="space-between">
-  <span>{{ currentFolder | customCurrentFolder | customString }}</span>
-  <button *ngIf="returnButtonVisible && currentFolder != 'Repositories'" (click)="historyBack()">
-    Retour</button> </div>
-<div class="card" *ngIf="list" fxLayout="column" align="start">
-  <ul>
-    <ng-container *ngFor="let item of list">
-      <li (click)="getContent(item)">{{ item | customString }}</li>
-    </ng-container>
-  </ul>
-</div> -->

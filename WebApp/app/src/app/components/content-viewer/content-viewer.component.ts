@@ -1,4 +1,6 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { StreamingService } from 'src/app/services/streaming/streaming.service';
+import { LoaderService } from 'src/app/services/loader/loader.service';
 
 @Component({
   selector: 'app-content-viewer',
@@ -7,19 +9,37 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class ContentViewerComponent implements OnInit {
   @Input() link;
-  @Input() image;
+  @Input() imageJSON;
+  @Input() currentFolder;
+  @Input() imageLeft;
+  @Input() imageRight;
   
-  constructor() { }
+  @Output() imageDataChange: EventEmitter<string> = new EventEmitter<string>();
+  
+  constructor(private streamingService: StreamingService, private loaderService: LoaderService) { }
 
   ngOnInit() {
   }
 
-  // get link(): any { 
-  //   return this._link;
-  // }
-  
-  // @Input()
-  // set link(val: any) {
-  //   this._link = val;
-  // }
+  getImage(imageSelected: string): void {
+    this.loaderService.setSpinnerState(true);
+    
+    if(imageSelected){
+      new Promise<any>((resolve, reject) => {
+        this.streamingService.getImage(this.currentFolder + '/' + imageSelected).subscribe(res => {
+          this.loaderService.setSpinnerState(false);
+          resolve(res);
+        }, err => {
+          this.loaderService.setSpinnerState(false);
+          reject(err);
+        });
+      }).then(res => {
+        this.imageJSON = {
+          name: imageSelected,
+          base64: res.image
+        };
+        this.imageDataChange.emit(this.imageJSON);
+      }).catch(err => console.log('Error from APIs', err));
+    }
+  }
 }
