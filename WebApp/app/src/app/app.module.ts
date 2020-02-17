@@ -29,8 +29,8 @@ import { CustomCurrentFolder } from './pipes/customCurrentFolder.pipe';
 import { CustomString } from './pipes/customString.pipe';
 import { CustomStringThreeDots } from './pipes/customStringThreeDots.pipe';
 
-import { StreamingService } from './services/streaming/streaming.service';
-import { UploadFileService } from './services/upload-file/upload-file.service';
+import { StreamService } from './services/stream/stream.service';
+import { UploadService } from './services/upload/upload.service';
 import { LoaderService } from './services/loader/loader.service';
 
 @NgModule({
@@ -69,7 +69,7 @@ import { LoaderService } from './services/loader/loader.service';
     MatButtonModule,
     MatCardModule
   ],
-  providers: [StreamingService, UploadFileService, LoaderService],
+  providers: [StreamService, UploadService, LoaderService],
   entryComponents: [NewFolderDialogComponent, RenameDialogComponent, NewFileDialogComponent],
   bootstrap: [AppComponent]
 })

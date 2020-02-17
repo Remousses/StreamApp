@@ -1,9 +1,9 @@
 version: "3.4"
 
 services:
-  streaming_app_dev:
-    hostname: streaming_app_dev
-    container_name: streaming_app_dev
+  stream_app_dev:
+    hostname: stream_app_dev
+    container_name: stream_app_dev
     build:
       context: ./
       dockerfile: Dockerfile_dev
@@ -13,9 +13,9 @@ services:
       - 4200:4200
     stdin_open: true
 
-  streaming_app:
-    hostname: streaming_app
-    container_name: streaming_app
+  stream_app:
+    hostname: stream_app
+    container_name: stream_app
     restart: always
     build:
       context: ./
@@ -26,4 +26,4 @@ services:
 networks: 
   default:
     external:
-      name: streaming_app_network
+      name: stream_app_network
