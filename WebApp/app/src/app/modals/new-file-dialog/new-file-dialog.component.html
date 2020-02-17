@@ -1,16 +1,14 @@
-<h1 mat-dialog-title>Create a new folder</h1>
+<h1 mat-dialog-title>Ajouter un nouveau fichier</h1>
 
+<form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
 <mat-dialog-content>
-  <form [formGroup]="uploadForm" (ngSubmit)="onSubmit()">
-    <input type="file" (change)="onFileChange($event)" />
-    
-    <input type="submit" [disabled]="uploadForm.invalid" value="upload" />
-  </form>
-</mat-dialog-content>
-
-<mat-dialog-actions>
-  <button mat-raised-button mat-dialog-close>Cancel</button>
-  <button mat-raised-button color="primary">
-    OK
-  </button>
-</mat-dialog-actions>
+  <input type="file" multiple (change)="onFilesChange($event)" />
+  </mat-dialog-content>
+  
+  <mat-dialog-actions>
+    <button mat-raised-button mat-dialog-close>Cancel</button>
+    <button mat-raised-button color="primary" [disabled]="uploadForm.invalid" type="submit">
+      Upload
+    </button>
+  </mat-dialog-actions>
+</form>

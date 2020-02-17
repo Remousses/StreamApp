@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Mangas } from 'src/app/utils/mangas';
 
-import { StreamingService } from '../../services/streaming/streaming.service';
+import { StreamService } from '../../services/stream/stream.service';
 import { LoaderService } from 'src/app/services/loader/loader.service';
 
 @Component({
@@ -20,7 +20,7 @@ export class SearchMangasComponent implements OnInit {
   txtMangaChapter: string = '';
   allMangas = Mangas;
 
-  constructor(private streamingService: StreamingService, private loaderService: LoaderService) { }
+  constructor(private streamService: StreamService, private loaderService: LoaderService) { }
 
   ngOnInit() {
     this.allMangas.forEach(manga => {
@@ -31,7 +31,7 @@ export class SearchMangasComponent implements OnInit {
   searchManga(name: string, chapter: string):void {
     this.loaderService.setSpinnerState(true);
     new Promise<any>((resolve, reject) => {
-      this.streamingService.searchManga(name, chapter).subscribe(res => {
+      this.streamService.searchManga(name, chapter).subscribe(res => {
         this.loaderService.setSpinnerState(false);
         resolve(true);
       }, err => {
@@ -44,7 +44,7 @@ export class SearchMangasComponent implements OnInit {
         this.refresh();
         this.searchMangaSuccess = res;
       }
-    }).catch(err => console.log('Error from APIs', err));
+    }).catch(err => console.log('Error from API', err));
   }
 
   refresh(){

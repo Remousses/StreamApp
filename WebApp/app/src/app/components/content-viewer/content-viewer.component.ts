@@ -1,6 +1,7 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
-import { StreamingService } from 'src/app/services/streaming/streaming.service';
+import { StreamService } from 'src/app/services/stream/stream.service';
 import { LoaderService } from 'src/app/services/loader/loader.service';
+import { UploadService } from 'src/app/services/upload/upload.service';
 
 @Component({
   selector: 'app-content-viewer',
@@ -13,33 +14,52 @@ export class ContentViewerComponent implements OnInit {
   @Input() currentFolder;
   @Input() imageLeft;
   @Input() imageRight;
-  
+  @Input() actualContent;
+
   @Output() imageDataChange: EventEmitter<string> = new EventEmitter<string>();
-  
-  constructor(private streamingService: StreamingService, private loaderService: LoaderService) { }
+  @Output() refreshView: EventEmitter<string> = new EventEmitter<string>();
+
+  constructor(private streamService: StreamService,
+              private loaderService: LoaderService,
+              private uploadService: UploadService) { }
 
   ngOnInit() {
   }
 
   getImage(imageSelected: string): void {
     this.loaderService.setSpinnerState(true);
-    
-    if(imageSelected){
-      new Promise<any>((resolve, reject) => {
-        this.streamingService.getImage(this.currentFolder + '/' + imageSelected).subscribe(res => {
-          this.loaderService.setSpinnerState(false);
-          resolve(res);
-        }, err => {
-          this.loaderService.setSpinnerState(false);
-          reject(err);
-        });
-      }).then(res => {
+
+    if (imageSelected) {
+      // new Promise<any>((resolve, reject) => {
+      this.streamService.getImage(this.currentFolder + '/' + imageSelected).subscribe(res => {
+        this.loaderService.setSpinnerState(false);
         this.imageJSON = {
           name: imageSelected,
           base64: res.image
         };
         this.imageDataChange.emit(this.imageJSON);
-      }).catch(err => console.log('Error from APIs', err));
+        // resolve(res);
+      }, err => {
+        this.loaderService.setSpinnerState(false);
+        console.log('Error from API', err);
+        // reject(err);
+
+      });
+      // }).then(res => {
+
+      // }).catch(err => );
+    }
+  }
+
+  deleteFile() {
+    if (confirm('Êtres-vius sûr de vouloir supprimer ce fichier ?')) {
+      this.uploadService.deleteFile(this.currentFolder, this.actualContent).subscribe(res => {
+        this.loaderService.setSpinnerState(false);
+        this.refreshView.emit();
+      }, err => {
+        this.loaderService.setSpinnerState(false);
+        console.log('Error from API', err);
+      });
     }
   }
 }

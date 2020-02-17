@@ -2,29 +2,42 @@
   <mat-icon class="pointer" *ngIf="currentFolder != 'Repositories'" (click)="historyBack()">
     arrow_back
   </mat-icon>
-  <span style="margin-left: 8px"> {{ currentFolder | customCurrentFolder | customString }} </span>
+  <span style="margin-left: 8px"> {{ currentFolder | customCurrentFolder }} </span>
   <span class="spacer"></span>
-  <mat-icon class="pointer" (click)="openNewFolderDialog()">
-    create_new_folder
-  </mat-icon>
-  <mat-icon class="pointer" (click)="openNewFileDialog()">
-    file_upload
-  </mat-icon>
+  <div class="icon-spacer">
+    <mat-icon class="pointer" *ngIf="currentFolder != 'Repositories'" (click)="deleteFolder()">
+      delete
+    </mat-icon>
+  </div>
+  <div class="icon-spacer">
+    <mat-icon class="pointer" (click)="openNewFolderDialog()">
+      create_new_folder
+    </mat-icon>
+  </div>
+  <div class="icon-spacer">
+    <mat-icon class="pointer" (click)="openNewFileDialog()">
+      file_upload
+    </mat-icon>
+  </div>
+  <div class="icon-spacer">
+    <mat-icon class="pointer" (click)="getAllContentByRepo(currentFolder)">
+      refresh
+    </mat-icon>
+  </div>
 </mat-toolbar>
 
 <div class="container" fxFlex fxLayout="row" fxLayoutAlign="space-between stretch">
   <div class="content" fxFlex fxLayout="row">
     <mat-grid-list cols="8" rowHeight="100px" fxFlex>
       <mat-grid-tile *ngFor="let item of contentList" class="file-or-folder">
-        <div fxLayout="column" fxLayoutAlign="space-between center text-truncate" (click)="getContent(item)"
-          >
+        <div fxLayout="column" fxLayoutAlign="space-between center text-truncate" (click)="getContent(item)">
           <mat-icon *ngIf="!item.split('.')[1]" color="primary" class="file-or-folder-icon pointer">
             folder
           </mat-icon>
           <mat-icon *ngIf="item.split('.')[1]" color="primary" class="file-or-folder-icon pointer">
             insert_drive_file
           </mat-icon>
-          
+
           <div class="tooltip">
             {{ item | customString | customStringThreeDots }}
             <span class="tooltiptext">{{ item | customString }}</span>

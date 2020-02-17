@@ -1,6 +1,11 @@
 import { Component, OnInit } from '@angular/core';
-import { StreamingService } from 'src/app/services/streaming/streaming.service';
+import { StreamService } from 'src/app/services/stream/stream.service';
 import { FormBuilder, Validators } from '@angular/forms';
+
+import { MatDialogRef } from '@angular/material';
+
+import { LoaderService } from 'src/app/services/loader/loader.service';
+import { UploadService } from 'src/app/services/upload/upload.service';
 
 @Component({
   selector: 'app-new-file-dialog',
@@ -8,36 +13,47 @@ import { FormBuilder, Validators } from '@angular/forms';
   styleUrls: ['./new-file-dialog.component.scss']
 })
 export class NewFileDialogComponent implements OnInit {
-  uploadFileName: string = '';
+  filesToUpload: [];
   uploadForm = this.formBuilder.group({
-    file: [null, Validators.required]
+    files: [null, Validators.required]
   });
 
-  constructor(private streamingService: StreamingService, private formBuilder: FormBuilder) { }
+  constructor(private uploadService: UploadService,
+              private formBuilder: FormBuilder,
+              private loaderService: LoaderService,
+              private dialogRef: MatDialogRef<NewFileDialogComponent>) { }
 
   ngOnInit() {
   }
 
-  onFileChange(event) {
-    const reader = new FileReader();
-
-    if (event.target.files && event.target.files.length) {
-      this.uploadFileName = event.target.files[0].name;
-      const [file] = event.target.files;
-      reader.readAsDataURL(file);
-
-      reader.onload = () => {
-        this.uploadForm.patchValue({
-          file: reader.result
-        });
-      };
+  onFilesChange(event: any) {
+    const eventFiles = event.target.files;
+    
+    if(eventFiles && eventFiles.length > 0){
+      this.filesToUpload = eventFiles;
     }
+    
+    this.uploadForm.patchValue({
+      files: eventFiles
+    });
   }
 
   onSubmit() {
-    this.streamingService.upload(this.uploadFileName, this.uploadForm.get('file').value).subscribe(res => {
-      console.log("onSubmit", res);
+    this.loaderService.setSpinnerState(true);
+
+    let formData: FormData = new FormData();
+    formData.append('currentFolder', localStorage.getItem('currentFolder'));
+
+    for(let file of this.filesToUpload){
+      formData.append('files', file);
+    };
+
+    this.uploadService.upload(formData).subscribe(res => {
+      this.loaderService.setSpinnerState(false);
+      this.dialogRef.close();
     }, err => {
+      this.dialogRef.close();
+      this.loaderService.setSpinnerState(false);
       console.log(err);
     });
   }

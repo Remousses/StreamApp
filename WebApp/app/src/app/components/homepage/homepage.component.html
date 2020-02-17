@@ -1,10 +1,7 @@
 <div style="height: 100%; box-sizing: border-box;">
   <mat-card style="height: 100%; box-sizing: border-box; padding:0">
-    <app-file-explorer-viewer #fileExplorerViewer [fileElements]="fileElements | async"
-      (folderAdded)="addFolder($event)" (elementRemoved)="removeElement($event)"
-      (navigatedDown)="navigateToFolder($event)" (elementRenamed)="renameElement($event)" [imageJSON]="imageJSON"
-      (imageDataChange)="changeImage($event)" [contentList]="contentList"
-      (contentListDataChange)="changeContentList($event)">
+    <app-file-explorer-viewer #fileExplorerViewer [imageJSON]="imageJSON" (imageDataChange)="changeImage($event)"
+      [contentList]="contentList" (contentListDataChange)="changeContentList($event)">
     </app-file-explorer-viewer>
   </mat-card>
 </div>
@@ -14,7 +11,8 @@
 
 <app-content-viewer #contentViewer [link]="fileExplorerViewer.link" [imageJSON]="imageJSON"
   [currentFolder]="fileExplorerViewer.currentFolder" [imageLeft]="imageLeft" [imageRight]="imageRight"
-  (imageDataChange)="changeImage($event)"></app-content-viewer>
+  (imageDataChange)="changeImage($event)" [actualContent]="fileExplorerViewer.actualContent"
+  (refreshView)="fileExplorerViewer.getAllContentByRepo(fileExplorerViewer.currentFolder)"></app-content-viewer>
 
 <div class="loading" *ngIf="loaderService.getSpinnerState()">
   <mat-spinner></mat-spinner>
