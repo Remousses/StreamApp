@@ -1,0 +1,73 @@
+const fs = require('fs'),
+    path = require('path'),
+    express = require('express'),
+    cors = require("cors"),
+    app = express(),
+    { check } = require('express-validator'),
+    bodyParser = require("body-parser");;
+
+const upload = require('./routes/uploads'),
+    video = require('./routes/videos'),
+    image = require('./routes/images'),
+    audio = require('./routes/audios'),
+    mangas = require('./routes/mangas');
+
+const checkError = require('./common/checkError');
+
+app.use(bodyParser.json());
+app.use(cors());
+
+app.use("/", upload);
+
+app.use("", video);
+
+app.use("", image);
+
+app.use("", audio);
+
+app.use("", mangas);
+
+app.get('/content', [
+    check('path').not().isEmpty().withMessage('Ce champ est obligatoire')
+], (req, res) => {
+    let error = checkError(req, res);
+    if (error) {
+        return res.status(422).json(error);
+    }
+
+    let repo = req.query.path;
+
+    if (!repo.startsWith('Repositories')) {
+        repo = 'Repositories/' + repo;
+    }
+
+    console.log('Récupération de tous le contenu du dossier ' + repo);
+
+    getAllContent(res, repo);
+});
+
+app.all("/*", (req, res, next) => {
+    console.log("Request on ", req.path);
+    next();
+});
+
+app.listen(8080, () => {
+    console.log('Stream app launched on port ' + 8080);
+});
+
+function getAllContent(res, repo) {
+    let contentList = [];
+    let dir = path.resolve(__dirname.replace('/app/server', '/app'), repo);
+    repo = repo.replace('//', '/');
+
+    fs.readdirSync(dir).forEach(file => {
+        contentList.push(file);
+    });
+
+    // fs.closeSync();
+
+    return res.status(200).send({
+        list: contentList,
+        path: repo
+    });
+}
