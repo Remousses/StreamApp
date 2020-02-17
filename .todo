@@ -1,0 +1,16 @@
+Reste à faire:
+    Delete:
+        ☐ Suppression des fichiers audios et vidéos
+        ✔ Suppression des images @done(20-02-17 22:50)
+
+    Download:
+        ☐ Pouvoir télécharger les fichiers séparément
+
+    Pdf:
+        ☐ Viewer (href target="_blank" ?)
+
+    Responsive:
+        ☐ Mode mobile / tablette plus responsive (file-explorer-viewer)
+
+    shell:
+        ☐ mangas-scan.sh revoir car ne fonctionne plus...
