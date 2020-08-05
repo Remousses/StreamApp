@@ -38,10 +38,8 @@
   // width: 120px;
   background-color: black;
   color: #fff;
-  text-align: center;
   border-radius: 6px;
-  padding: 5px 0;
-
+  padding: 5px;
   /* Position the tooltip */
   position: initial;
   z-index: 1;
@@ -49,6 +47,10 @@
 
 .tooltip:hover .tooltiptext {
   display: block;
+}
+
+.tooltip {
+  text-align: center;
 }
 
 .mat-grid-tile .mat-figure {

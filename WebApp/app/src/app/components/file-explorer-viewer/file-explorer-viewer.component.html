@@ -1,26 +1,26 @@
 <mat-toolbar>
-  <mat-icon class="pointer" *ngIf="currentFolder != 'Repositories'" (click)="historyBack()">
+  <mat-icon class="pointer" *ngIf="currentFolder != initRepo" (click)="historyBack()">
     arrow_back
   </mat-icon>
   <span style="margin-left: 8px"> {{ currentFolder | customCurrentFolder }} </span>
   <span class="spacer"></span>
   <div class="icon-spacer">
-    <mat-icon class="pointer" *ngIf="currentFolder != 'Repositories'" (click)="deleteFolder()">
+    <mat-icon class="pointer" *ngIf="currentFolder != initRepo" (click)="deleteFolder()" title="Supprimer un dossier">
       delete
     </mat-icon>
   </div>
   <div class="icon-spacer">
-    <mat-icon class="pointer" (click)="openNewFolderDialog()">
+    <mat-icon class="pointer" (click)="openNewFolderDialog()" title="Créer un dossier">
       create_new_folder
     </mat-icon>
   </div>
   <div class="icon-spacer">
-    <mat-icon class="pointer" (click)="openNewFileDialog()">
+    <mat-icon class="pointer" (click)="openNewFilesDialog()" title="Ajouter un nouveau fichier">
       file_upload
     </mat-icon>
   </div>
   <div class="icon-spacer">
-    <mat-icon class="pointer" (click)="getAllContentByRepo(currentFolder)">
+    <mat-icon class="pointer" (click)="getAllContentByRepo(currentFolder)" title="Rafraîchir">
       refresh
     </mat-icon>
   </div>
@@ -31,13 +31,14 @@
     <mat-grid-list cols="8" rowHeight="100px" fxFlex>
       <mat-grid-tile *ngFor="let item of contentList" class="file-or-folder">
         <div fxLayout="column" fxLayoutAlign="space-between center text-truncate" (click)="getContent(item)">
-          <mat-icon *ngIf="!item.split('.')[1]" color="primary" class="file-or-folder-icon pointer">
+          <mat-icon *ngIf="!item.split('.')[1]; else elseblock" color="primary" class="file-or-folder-icon pointer">
             folder
           </mat-icon>
-          <mat-icon *ngIf="item.split('.')[1]" color="primary" class="file-or-folder-icon pointer">
+          <ng-template #elseblock>
+            <mat-icon color="primary" class="file-or-folder-icon pointer">
             insert_drive_file
           </mat-icon>
-
+        </ng-template>
           <div class="tooltip">
             {{ item | customString | customStringThreeDots }}
             <span class="tooltiptext">{{ item | customString }}</span>
