@@ -13,15 +13,15 @@ services:
       - 4200:4200
     stdin_open: true
 
-  stream_app:
-    hostname: stream_app
-    container_name: stream_app
-    restart: always
-    build:
-      context: ./
-      dockerfile: Dockerfile
-    ports:
-      - 4200
+  # stream_app:
+  #   hostname: stream_app
+  #   container_name: stream_app
+  #   restart: always
+  #   build:
+  #     context: ./
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 4200
 
 networks: 
   default:
