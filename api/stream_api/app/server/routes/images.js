@@ -1,10 +1,11 @@
 const routes = require('express').Router(),
     { check } = require('express-validator');
 
-const searchImage = require('../common/searchImage') 
+const searchImage = require('../common/searchImage'),
+    errorFile = require('../common/error');
 
 routes.get('/searchImage', [
-    check('path').not().isEmpty().withMessage('Ce champ est obligatoire')
+    check('path').not().isEmpty().withMessage(errorFile.commonErrorMessage)
 ], (req, res) => {
     let repo = req.query.path;
 

@@ -2,12 +2,13 @@ import { Component, OnInit, Input, EventEmitter, Output } from '@angular/core';
 
 import { StreamService } from 'src/app/services/stream/stream.service';
 import { environment } from 'src/environments/environment';
+import { common } from 'src/app/utils/common';
 
 import { FileElement } from 'src/app/model/file-element';
 import { MatDialog } from '@angular/material';
 import { NewFolderDialogComponent } from 'src/app/modals/new-folder-dialog/new-folder-dialog.component';
 import { RenameDialogComponent } from 'src/app/modals/rename-dialog/rename-dialog.component';
-import { NewFileDialogComponent } from 'src/app/modals/new-file-dialog/new-file-dialog.component';
+import { NewFilesDialogComponent } from 'src/app/modals/new-files-dialog/new-files-dialog.component';
 import { LoaderService } from 'src/app/services/loader/loader.service';
 import { UploadService } from 'src/app/services/upload/upload.service';
 
@@ -18,8 +19,9 @@ import { UploadService } from 'src/app/services/upload/upload.service';
 })
 export class FileExplorerViewerComponent implements OnInit {
   link: string = '';
-  currentFolder: string = 'Repositories';
+  currentFolder: string = '';
   actualContent: string = '';
+  initRepo: string = common.initRepo;
 
   @Input() imageJSON;
   @Input() contentList;
@@ -30,7 +32,9 @@ export class FileExplorerViewerComponent implements OnInit {
   constructor(private streamService: StreamService,
     private dialog: MatDialog,
     private loaderService: LoaderService,
-    private uploadService: UploadService) { }
+    private uploadService: UploadService) {
+      this.currentFolder = this.initRepo;
+    }
 
   ngOnInit() {
     this.getAllContentByRepo(localStorage.getItem('currentFolder') || this.currentFolder);
@@ -38,12 +42,12 @@ export class FileExplorerViewerComponent implements OnInit {
 
   openNewFolderDialog() {
     let dialogRef = this.dialog.open(NewFolderDialogComponent);
-    dialogRef.afterClosed().subscribe(res => this.getAllContentByRepo(this.currentFolder));
+    dialogRef.afterClosed().subscribe(() => this.getAllContentByRepo(this.currentFolder));
   }
 
-  openNewFileDialog() {
-    let dialogRef = this.dialog.open(NewFileDialogComponent);
-    dialogRef.afterClosed().subscribe(res => this.getAllContentByRepo(this.currentFolder));
+  openNewFilesDialog() {
+    let dialogRef = this.dialog.open(NewFilesDialogComponent);
+    dialogRef.afterClosed().subscribe(() => this.getAllContentByRepo(this.currentFolder));
   }
 
   openRenameDialog(element: FileElement) {
@@ -123,8 +127,8 @@ export class FileExplorerViewerComponent implements OnInit {
       this.loaderService.setSpinnerState(false);
     },
       err => {
-        console.log('Error from APIs, reset by Repositories', err);
-        this.streamService.getAllContent('Repositories').subscribe(res => {
+        console.log('Error from APIs, reset by', this.initRepo, err);
+        this.streamService.getAllContent(this.initRepo).subscribe(res => {
           this.contentList = res.list;
           this.contentListDataChange.emit(this.contentList);
           this.setCurrentFolder(res.path);
@@ -167,7 +171,7 @@ export class FileExplorerViewerComponent implements OnInit {
   }
 
   deleteFolder() {
-    if (confirm('Êtres-vius sûr de vouloir supprimer ce fichier ?')) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce dossier ?')) {
       this.uploadService.deleteFolder(this.currentFolder).subscribe(res => {
         if(res.folderDeleted) {
           this.loaderService.setSpinnerState(false);

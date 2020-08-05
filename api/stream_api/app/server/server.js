@@ -12,7 +12,7 @@ const upload = require('./routes/uploads'),
     audio = require('./routes/audios'),
     mangas = require('./routes/mangas');
 
-const checkError = require('./common/checkError');
+const errorFile = require('./common/error');
 
 app.use(bodyParser.json());
 app.use(cors());
@@ -28,9 +28,9 @@ app.use("", audio);
 app.use("", mangas);
 
 app.get('/content', [
-    check('path').not().isEmpty().withMessage('Ce champ est obligatoire')
+    check('path').not().isEmpty().withMessage(errorFile.commonErrorMessage)
 ], (req, res) => {
-    let error = checkError(req, res);
+    let error = errorFile.checkError(req);
     if (error) {
         return res.status(422).json(error);
     }

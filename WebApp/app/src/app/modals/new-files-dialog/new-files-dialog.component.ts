@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { StreamService } from 'src/app/services/stream/stream.service';
 import { FormBuilder, Validators } from '@angular/forms';
 
 import { MatDialogRef } from '@angular/material';
@@ -8,20 +7,20 @@ import { LoaderService } from 'src/app/services/loader/loader.service';
 import { UploadService } from 'src/app/services/upload/upload.service';
 
 @Component({
-  selector: 'app-new-file-dialog',
-  templateUrl: './new-file-dialog.component.html',
-  styleUrls: ['./new-file-dialog.component.scss']
+  selector: 'app-new-files-dialog',
+  templateUrl: './new-files-dialog.component.html',
+  styleUrls: ['./new-files-dialog.component.scss']
 })
-export class NewFileDialogComponent implements OnInit {
+export class NewFilesDialogComponent implements OnInit {
   filesToUpload: [];
-  uploadForm = this.formBuilder.group({
+  uploadFilesForm = this.formBuilder.group({
     files: [null, Validators.required]
   });
 
   constructor(private uploadService: UploadService,
               private formBuilder: FormBuilder,
               private loaderService: LoaderService,
-              private dialogRef: MatDialogRef<NewFileDialogComponent>) { }
+              private dialogRef: MatDialogRef<NewFilesDialogComponent>) { }
 
   ngOnInit() {
   }
@@ -33,12 +32,12 @@ export class NewFileDialogComponent implements OnInit {
       this.filesToUpload = eventFiles;
     }
     
-    this.uploadForm.patchValue({
+    this.uploadFilesForm.patchValue({
       files: eventFiles
     });
   }
 
-  onSubmit() {
+  uploadFiles() {
     this.loaderService.setSpinnerState(true);
 
     let formData: FormData = new FormData();
@@ -48,7 +47,7 @@ export class NewFileDialogComponent implements OnInit {
       formData.append('files', file);
     };
 
-    this.uploadService.upload(formData).subscribe(res => {
+    this.uploadService.uploadFiles(formData).subscribe(res => {
       this.loaderService.setSpinnerState(false);
       this.dialogRef.close();
     }, err => {
