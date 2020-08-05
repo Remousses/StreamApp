@@ -1,4 +1,4 @@
-<button mat-raised-button color="primary" *ngIf="actualContent" (click)="deleteFile()">Supprimer ce fichier</button>
+<button mat-raised-button color="primary" style="margin-top: 10px" *ngIf="actualContent" (click)="deleteFile()">Supprimer ce fichier</button>
 
 <div *ngIf="link" fxLayout="row">
     <div class="card" *ngIf="link.includes('mp4')">
@@ -18,7 +18,7 @@
     <div *ngIf="imageLeft" class="card-image-text-left">
         <mat-icon class="card-image-arrow" (click)="getImage(imageLeft)">keyboard_arrow_left</mat-icon>
     </div>
-    <div class="card-image">
+    <div class="card">
         <img height="700px" [src]="imageJSON.base64" (click)="getImage(imageRight)">
     </div>
     <div *ngIf="imageRight" class="card-image-text-right">

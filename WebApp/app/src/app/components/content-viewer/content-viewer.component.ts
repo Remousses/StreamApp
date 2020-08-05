@@ -52,7 +52,7 @@ export class ContentViewerComponent implements OnInit {
   }
 
   deleteFile() {
-    if (confirm('Êtres-vius sûr de vouloir supprimer ce fichier ?')) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer ce fichier ?')) {
       this.uploadService.deleteFile(this.currentFolder, this.actualContent).subscribe(res => {
         this.loaderService.setSpinnerState(false);
         this.refreshView.emit();

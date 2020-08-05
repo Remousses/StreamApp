@@ -6,10 +6,6 @@
     margin: 30px auto;
 }
 
-.card-image {
-    margin: 0 auto;
-}
-
 .card-image-text-right {
     float: right;
     height: 700px;
@@ -30,6 +26,7 @@
 
 .card-image-arrow {
     font-size: 30px;
+    cursor: pointer;
 }
 
 video {
