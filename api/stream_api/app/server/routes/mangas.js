@@ -1,11 +1,12 @@
 const routes = require('express').Router(),
     shell = require('shelljs'),
-    { check } = require('express-validator');
+    { check } = require('express-validator'),
+    fs = require('fs');
 
-const checkError = require('../common/checkError');
+const errorFile = require('../common/error');
 
 routes.get('/test', (req, res) => {
-    shell.exec('./Bash-scripts/test.sh one-piece');
+    shell.exec('./bash-scripts/test.sh one-piece');
 
     res.status(200).send({
         res: 'OK'
@@ -13,10 +14,10 @@ routes.get('/test', (req, res) => {
 });
 
 routes.get('/mangas/searchManga', [
-    check('name').not().isEmpty().withMessage('Ce champ est obligatoire'),
-    check('chapter').not().isEmpty().withMessage('Ce champ est obligatoire')
+    check('name').not().isEmpty().withMessage(errorFile.commonErrorMessage),
+    check('chapter').not().isEmpty().withMessage(errorFile.commonErrorMessage)
 ], (req, res) => {
-    let error = checkError(req, res);
+    let error = errorFile.checkError(req);
     if (error) {
         return res.status(422).json(error);
     }
@@ -25,7 +26,15 @@ routes.get('/mangas/searchManga', [
     let chapter = req.query.chapter;
     console.log('Trying to search chapter ' + chapter + ' of manga ' + name);
 
-    shell.exec('./Bash-scripts/mangas-scan.sh ' + name + ' ' + chapter);
+    shell.exec('./server/bash-scripts/mangas-scan.sh ' + name + ' ' + chapter);
+
+    res.status(200).send({
+        res: 'OK'
+    }).end();
+});
+
+routes.get('/mangas/dlCA', (req, res) => {
+    shell.exec('./server/bash-scripts/dl-ca.sh');
 
     res.status(200).send({
         res: 'OK'

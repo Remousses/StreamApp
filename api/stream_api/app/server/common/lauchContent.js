@@ -1,10 +1,10 @@
 const fs = require('fs'),
     path = require('path');
 
-const checkError = require('./checkError');
+const errorFile = require('./error');
 
 module.exports = function launchContent(req, res, repo, fileName) {
-    let error = checkError(req, res);
+    let error = errorFile.checkError(req);
     if (error) {
         return res.status(422).json(error);
     }

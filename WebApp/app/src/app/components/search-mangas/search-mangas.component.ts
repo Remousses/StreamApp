@@ -1,9 +1,10 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
 import { Mangas } from 'src/app/utils/mangas';
+import { common } from 'src/app/utils/common';
 
-import { StreamService } from '../../services/stream/stream.service';
 import { LoaderService } from 'src/app/services/loader/loader.service';
+import { UploadService } from 'src/app/services/upload/upload.service';
 
 @Component({
   selector: 'app-search-mangas',
@@ -19,8 +20,9 @@ export class SearchMangasComponent implements OnInit {
   txtManga: string = '';
   txtMangaChapter: string = '';
   allMangas = Mangas;
+  initRepo: string = common.initRepo;
 
-  constructor(private streamService: StreamService, private loaderService: LoaderService) { }
+  constructor(private uploadService: UploadService, private loaderService: LoaderService) {}
 
   ngOnInit() {
     this.allMangas.forEach(manga => {
@@ -28,10 +30,10 @@ export class SearchMangasComponent implements OnInit {
     });
   }
 
-  searchManga(name: string, chapter: string):void {
+  searchManga(): void {
     this.loaderService.setSpinnerState(true);
     new Promise<any>((resolve, reject) => {
-      this.streamService.searchManga(name, chapter).subscribe(res => {
+      this.uploadService.searchManga(this.txtManga, this.txtMangaChapter).subscribe(res => {
         this.loaderService.setSpinnerState(false);
         resolve(true);
       }, err => {
@@ -47,7 +49,7 @@ export class SearchMangasComponent implements OnInit {
     }).catch(err => console.log('Error from API', err));
   }
 
-  refresh(){
+  refresh(): void {
     this.searchMangaSuccess = false;
     this.refreshView.emit();
   }

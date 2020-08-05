@@ -1,14 +1,15 @@
-<div fxLayout="row" align="center"
-    *ngIf="currentFolder === 'Repositories' || currentFolder.includes('Repositories/Mangas')">
+<div fxLayout="row" align="center" class="container-mangas"
+    *ngIf="currentFolder.includes(initRepo + '/Mangas')">
     <mat-form-field fxFlex="30">
+        <mat-label>Selectionner un manga (lelscanv)</mat-label>
         <mat-select [(ngModel)]="txtManga">
-            <mat-option *ngFor="let manga of allMangas" [value]="manga.value" placeholder="Selectionner un manga">
+            <mat-option *ngFor="let manga of allMangas" [value]="manga.value">
                 {{manga.name}}
             </mat-option>
         </mat-select>
     </mat-form-field>
-    <input type="number" matInput [(ngModel)]="txtMangaChapter" placeholder="Rechercher un chapitre" fxFlex="30">
-    <button mat-raised-button color="primary"  fxFlex="30" *ngIf="txtManga && txtMangaChapter" (click)="searchManga(txtManga, txtMangaChapter)">
+    <input  type="number" matInput [(ngModel)]="txtMangaChapter" placeholder="Rechercher un chapitre" fxFlex="30">
+    <button mat-raised-button color="primary" class="search-mangas" fxFlex="20" *ngIf="txtManga && txtMangaChapter" (click)="searchManga()">
         Rechercher
     </button>
 </div>

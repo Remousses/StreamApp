@@ -2,10 +2,10 @@ const fs = require('fs'),
     path = require('path'),
     btoa = require('btoa');
 
-const checkError = require('./checkError');
+const errorFile = require('./error');
 
 module.exports = function searchImage(req, res, repo) {
-    let error = checkError(req, res);
+    let error = errorFile.checkError(req);
     if (error) {
         return res.status(422).json(error);
     }
