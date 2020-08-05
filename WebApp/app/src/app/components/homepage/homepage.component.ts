@@ -4,6 +4,8 @@ import { Observable } from 'rxjs';
 import { FileElement } from 'src/app/model/file-element';
 import { LoaderService } from 'src/app/services/loader/loader.service';
 
+import { AllowedExtension } from 'src/app/utils/allowedExtension';
+
 @Component({
   selector: 'app-homepage',
   templateUrl: './homepage.component.html',
@@ -17,7 +19,7 @@ export class HomepageComponent implements OnInit {
   contentList: Array<string> = [];
   imageLeft: string = '';
   imageRight: string = '';
-  extension = { jpg: 'jpg', jpeg: 'jpeg', png: 'png' };
+  allAllowedExtension = AllowedExtension;
 
   fileElements: Observable<FileElement[]>;
   currentRoot: FileElement;
@@ -39,9 +41,15 @@ export class HomepageComponent implements OnInit {
     this.imageLeft = '';
     this.imageRight = '';
 
-    let imagesArray = this.contentList.filter(element => element.endsWith(this.extension.jpeg)
-                                              || element.endsWith(this.extension.jpg)
-                                              || element.endsWith(this.extension.png));
+    let imagesArray = this.contentList.filter(element => {
+      element = element.toLocaleLowerCase();
+      
+      if(element.endsWith(this.allAllowedExtension.JPEG)
+            || element.endsWith(this.allAllowedExtension.JPG)
+            || element.endsWith(this.allAllowedExtension.PNG)) {
+              return true;
+      }
+    });
                         
     imagesArray.forEach((element, key) => {
       if (value.name === element) {
