@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Observable } from 'rxjs';
+import { Observable } from 'rxjs/Observable';
 import { FileElement } from 'src/app/model/file-element';
 import { LoaderService } from 'src/app/services/loader/loader.service';
 

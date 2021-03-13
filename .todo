@@ -1,10 +1,18 @@
 Reste à faire:
+    Request:
+        ☐ Essayer d'utiliser les observable avec si possible les operators
+
     Delete:
         ☐ Suppression des fichiers audios et vidéos
         ✔ Suppression des images @done(20-02-17 22:50)
 
     Download:
         ☐ Pouvoir télécharger les fichiers séparément
+        ☐ Pouvoir télécharger les dossiers
+    
+    Upload:
+        ☐ Pouvoir uploader les fichiers séparément
+        ☐ Pouvoir uploader les dossiers
 
     Pdf:
         ☐ Viewer (href target="_blank" ?)
@@ -13,4 +21,8 @@ Reste à faire:
         ☐ Mode mobile / tablette plus responsive (file-explorer-viewer)
 
     shell:
-        ☐ mangas-scan.sh revoir car ne fonctionne plus...
+        ✔ mangas-scan.sh revoir car ne fonctionne plus... @done(20-04-29 23:54)
+        Récupération d'images tierces:
+            ☐ Pouvoir récupérer une image sur le net (champ pour renseigner l'url)
+            ☐ Choisir si une ou plusieurs images. Si plusieurs alors choisir si le même début d'url sinon ne pas mettre tous les urls 
+            ☐ Avoir un champ pour spécifier le dossier de destination (par défaut current folder)

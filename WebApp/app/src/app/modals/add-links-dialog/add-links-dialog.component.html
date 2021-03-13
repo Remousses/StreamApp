@@ -1,0 +1,27 @@
+<h1 mat-dialog-title>Ajouter des liens</h1>
+
+<form [formGroup]="addLinksForm" (ngSubmit)="validateLinks()">
+    <mat-dialog-content fxLayout="column">
+        <div fxLayout="row">
+            <mat-icon (click)="addItem()">add</mat-icon>
+        </div>
+
+        <div fxLayout="row" formArrayName="formArray" 
+            *ngFor="let link of formArray.controls; index as i">
+            <div fxLayout="row">
+                <mat-form-field fxLayout="column">
+                    <input matInput placeholder="Lien du fichier" formControlName="link" />
+                </mat-form-field>
+                <mat-icon fxLayout="column" (click)="removeItem(i)">remove</mat-icon>
+            </div>
+        
+        </div>
+    </mat-dialog-content>
+    
+    <mat-dialog-actions>
+      <button mat-raised-button mat-dialog-close>Cancel</button>
+      <button mat-raised-button color="primary" [disabled]="addLinksForm.invalid" type="submit">
+        Créer
+      </button>
+    </mat-dialog-actions>
+</form>

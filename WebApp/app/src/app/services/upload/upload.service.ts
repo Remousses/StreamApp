@@ -10,8 +10,12 @@ export class UploadService {
 
   constructor(private httpClient: HttpClient) {}
 
-  upload(formData: any) {
-    return this.httpClient.put<any>(environment.domaineName + 'uploads', formData);
+  uploadFiles(formData: FormData) {
+    return this.httpClient.put<any>(environment.domaineName + 'uploads/files', formData);
+  }
+
+  uploadLinks(formData: FormData) {
+    return this.httpClient.put<any>(environment.domaineName + 'uploads/links', formData);
   }
 
   createFolder(currentFolder: string, folderName: string) {
@@ -26,5 +30,9 @@ export class UploadService {
  
   deleteFile(currentFolder: string, fileName: string) {
     return this.httpClient.delete<any>(environment.domaineName + 'deleteFile?currentFolder=' + currentFolder + '&fileName=' + fileName);
+  }
+  
+  searchManga(name: string, chapter: string){
+    return this.httpClient.get<any>(environment.domaineName + 'Mangas/searchManga?name=' + name + '&chapter=' + chapter);
   }
 }

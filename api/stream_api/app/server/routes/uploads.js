@@ -2,7 +2,8 @@ const routes = require('express').Router(),
     multer = require('multer'),
     fs = require('fs'),
     { check } = require('express-validator'),
-    rimraf = require("rimraf");
+    rimraf = require("rimraf"),
+    shell = require('shelljs');
 
 const storage = multer.diskStorage({
     destination: (req, file, callBack) => {
@@ -16,7 +17,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage });
 
-routes.put('/uploads', upload.array('files'),
+const errorFile = require('../common/error');
+
+routes.put('/uploads/files', upload.array('files'),
     (req, res, next) => {
         const files = req.files;
 
@@ -30,6 +33,34 @@ routes.put('/uploads', upload.array('files'),
         res.send({ filesOploaded: true }).end();
     }
 );
+
+
+routes.put('/upload/links', [
+    check('folderDestination').not().isEmpty().withMessage(errorFile.commonErrorMessage),
+    check('links').not().isEmpty().withMessage(errorFile.commonErrorMessage)
+], (req, res) => {
+    console.log("coucou");
+    
+    let error = errorFile.checkError(req);
+    if (error) {
+        return res.status(422).json(error);
+    }
+
+    let folderDestination = req.query.folderDestination;
+    let links = req.query.links;
+
+    console.log('folderDestination', folderDestination);
+    console.log('links', links);
+    
+    let test = shell.exec('./server/bash-scripts/upload-links.sh ' + folderDestination + ' ' + links);
+    
+    console.log();
+    console.log("output", test.stdout)
+    
+    res.status(200).send({
+        res: 'OK'
+    }).end();
+});
 
 routes.put('/createFolder', (req, res) => {
     let body = req.body;
@@ -48,8 +79,8 @@ routes.put('/createFolder', (req, res) => {
 });
 
 routes.delete('/deleteFile',[
-    check('currentFolder').not().isEmpty().withMessage('Ce champ est obligatoire'),
-    check('fileName').not().isEmpty().withMessage('Ce champ est obligatoire')
+    check('currentFolder').not().isEmpty().withMessage(errorFile.commonErrorMessage),
+    check('fileName').not().isEmpty().withMessage(errorFile.commonErrorMessage)
 ], (req, res) => {
     let query = req.query;
     let path = query.currentFolder + '/' + query.fileName;
@@ -71,7 +102,7 @@ routes.delete('/deleteFile',[
 });
 
 routes.delete('/deleteFolder',[
-    check('currentFolder').not().isEmpty().withMessage('Ce champ est obligatoire'),
+    check('currentFolder').not().isEmpty().withMessage(errorFile.commonErrorMessage),
 ], (req, res) => {
     let currentFolder = req.query.currentFolder;
 

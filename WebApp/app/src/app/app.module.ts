@@ -8,22 +8,24 @@ import {
   MatIconModule, MatFormFieldModule, MatToolbarModule,
   MatGridListModule, MatMenuModule,
   MatDialogModule, MatButtonModule, MatCardModule,
-  MatProgressSpinnerModule
+  MatProgressSpinnerModule, MatTooltipModule
 } from '@angular/material';
-
 import { FlexLayoutModule } from "@angular/flex-layout";
-
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+
 import { HomepageComponent } from './components/homepage/homepage.component';
 import { FileExplorerViewerComponent } from './components/file-explorer-viewer/file-explorer-viewer.component';
 import { SearchMangasComponent } from './components/search-mangas/search-mangas.component';
 import { ContentViewerComponent } from './components/content-viewer/content-viewer.component';
+import { DownloadLinksComponent } from './components/download-links/download-links.component';
+
 import { NewFolderDialogComponent } from './modals/new-folder-dialog/new-folder-dialog.component';
 import { RenameDialogComponent } from './modals/rename-dialog/rename-dialog.component';
-import { NewFileDialogComponent } from './modals/new-file-dialog/new-file-dialog.component';
+import { NewFilesDialogComponent } from './modals/new-files-dialog/new-files-dialog.component';
+import { AddLinksDialogComponent } from './modals/add-links-dialog/add-links-dialog.component';
 
 import { CustomCurrentFolder } from './pipes/customCurrentFolder.pipe';
 import { CustomString } from './pipes/customString.pipe';
@@ -43,9 +45,11 @@ import { LoaderService } from './services/loader/loader.service';
     FileExplorerViewerComponent,
     SearchMangasComponent,
     ContentViewerComponent,
+    DownloadLinksComponent,
     NewFolderDialogComponent,
     RenameDialogComponent,
-    NewFileDialogComponent
+    NewFilesDialogComponent,
+    AddLinksDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -67,10 +71,11 @@ import { LoaderService } from './services/loader/loader.service';
     MatMenuModule,
     MatDialogModule,
     MatButtonModule,
-    MatCardModule
+    MatCardModule,
+    MatTooltipModule
   ],
   providers: [StreamService, UploadService, LoaderService],
-  entryComponents: [NewFolderDialogComponent, RenameDialogComponent, NewFileDialogComponent],
+  entryComponents: [NewFolderDialogComponent, RenameDialogComponent, NewFilesDialogComponent, AddLinksDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

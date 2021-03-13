@@ -1,9 +1,11 @@
+<app-download-links></app-download-links>
+
 <div style="height: 100%; box-sizing: border-box;">
   <mat-card style="height: 100%; box-sizing: border-box; padding:0">
     <app-file-explorer-viewer #fileExplorerViewer [imageJSON]="imageJSON" (imageDataChange)="changeImage($event)"
-      [contentList]="contentList" (contentListDataChange)="changeContentList($event)">
-    </app-file-explorer-viewer>
-  </mat-card>
+    [contentList]="contentList" (contentListDataChange)="changeContentList($event)">
+  </app-file-explorer-viewer>
+</mat-card>
 </div>
 
 <app-search-mangas #searchMangas [currentFolder]="fileExplorerViewer.currentFolder"

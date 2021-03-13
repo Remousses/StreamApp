@@ -17,8 +17,4 @@ export class StreamService {
   getAllContent(repo: string){
     return this.httpClient.get<any>(environment.domaineName + 'content?path=' + repo);
   }
-  
-  searchManga(name: string, chapter: string){
-    return this.httpClient.get<any>(environment.domaineName + 'Mangas/searchManga?name=' + name + '&chapter=' + chapter);
-  }
 }
