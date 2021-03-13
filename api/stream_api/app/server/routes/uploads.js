@@ -63,14 +63,16 @@ routes.put('/upload/links', [
 });
 
 routes.put('/createFolder', (req, res) => {
-    let body = req.body;
-    let folderName = body.folderName;
-    let dir = body.currentFolder + '/' + folderName;
+    const body = req.body;
+    const folderName = body.folderName;
+    const dir = body.currentFolder + '/' + folderName;
 
     console.log('Création du dossier ' + folderName + ' en cours');
 
     if (!fs.existsSync(dir)){
-        fs.mkdirSync(dir);
+        fs.mkdirSync(dir, {
+            recursive: true
+        });
         console.log('Création du dossier ' + folderName + ' terminé');
         return res.status(200).json({ folderCreated: true });
     }
