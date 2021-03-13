@@ -25,7 +25,7 @@ do
         if [ ! -f "$file" ]
         then
             echo 'Trying to get jpg 0 '$i
-            wget 'http://lelscanv.com/mangas/'$manga'/'$chapter'/0'$i'.jpg' || break
+            wget 'https://lelscans.net/mangas/'$manga'/'$chapter'/0'$i'.jpg' || break
         else
             echo 'File '$file' already exist'
         fi
@@ -34,7 +34,7 @@ do
         if [ ! -f "$file" ]
         then
             echo 'Trying to get jpg '$i
-            wget 'http://lelscanv.com/mangas/'$manga'/'$chapter'/'$i'.jpg' || break
+            wget 'https://lelscans.net/mangas/'$manga'/'$chapter'/'$i'.jpg' || break
         else
             echo 'File '$file' already exist'
         fi
