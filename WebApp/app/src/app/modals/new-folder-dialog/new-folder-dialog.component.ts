@@ -28,7 +28,6 @@ export class NewFolderDialogComponent implements OnInit {
     this.loaderService.setSpinnerState(true);
 
     this.uploadService.createFolder(localStorage.getItem('currentFolder'), this.createFolderForm.value.folderName).subscribe(res => {
-      console.log("createFolder", res);
       this.loaderService.setSpinnerState(false);
       this.dialogRef.close();
     }, err => {

@@ -10,7 +10,6 @@ const storage = multer.diskStorage({
         callBack(null, req.body.currentFolder)
     },
     filename: (req, file, callBack) => {
-        console.log("filename", file.originalname);
         callBack(null, file.originalname)
     }
 });
@@ -39,8 +38,6 @@ routes.put('/upload/links', [
     check('folderDestination').not().isEmpty().withMessage(errorFile.commonErrorMessage),
     check('links').not().isEmpty().withMessage(errorFile.commonErrorMessage)
 ], (req, res) => {
-    console.log("coucou");
-    
     let error = errorFile.checkError(req);
     if (error) {
         return res.status(422).json(error);
@@ -49,9 +46,6 @@ routes.put('/upload/links', [
     let folderDestination = req.query.folderDestination;
     let links = req.query.links;
 
-    console.log('folderDestination', folderDestination);
-    console.log('links', links);
-    
     let test = shell.exec('./server/bash-scripts/upload-links.sh ' + folderDestination + ' ' + links);
     
     console.log();

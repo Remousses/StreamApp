@@ -12,7 +12,6 @@ module.exports = function launchContent(req, res, repo, fileName) {
     let extension = fileName.split('.')[1];
 
     let file = path.resolve(__dirname.replace('/app/server/common', '/app'), repo);
-    console.log("file", file);
 
     fs.stat(file, function (err, stats) {
         if (err) {
@@ -45,7 +44,6 @@ module.exports = function launchContent(req, res, repo, fileName) {
         let stream = fs.createReadStream(file, { start: start, end: end })
             .on('open', (ddd) => {
                 stream.pipe(res);
-                console.log("ddd", ddd);
             }).on('error', function (err) {
                 return res.status(200).send(err);
             });
