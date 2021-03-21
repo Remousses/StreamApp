@@ -11,6 +11,7 @@ import { RenameDialogComponent } from 'src/app/modals/rename-dialog/rename-dialo
 import { NewFilesDialogComponent } from 'src/app/modals/new-files-dialog/new-files-dialog.component';
 import { LoaderService } from 'src/app/services/loader/loader.service';
 import { UploadService } from 'src/app/services/upload/upload.service';
+import { MobileService } from 'src/app/services/mobile/mobile.service'
 
 @Component({
   selector: 'app-file-explorer-viewer',
@@ -32,7 +33,8 @@ export class FileExplorerViewerComponent implements OnInit {
   constructor(private streamService: StreamService,
     private dialog: MatDialog,
     private loaderService: LoaderService,
-    private uploadService: UploadService) {
+    private uploadService: UploadService,
+    private mobileService: MobileService) {
       this.currentFolder = this.initRepo;
     }
 
@@ -41,18 +43,22 @@ export class FileExplorerViewerComponent implements OnInit {
   }
 
   openNewFolderDialog() {
-    let dialogRef = this.dialog.open(NewFolderDialogComponent);
-    dialogRef.afterClosed().subscribe(() => this.getAllContentByRepo(this.currentFolder));
+    this.openDialog(NewFolderDialogComponent, false);
   }
 
   openNewFilesDialog() {
-    let dialogRef = this.dialog.open(NewFilesDialogComponent);
-    dialogRef.afterClosed().subscribe(() => this.getAllContentByRepo(this.currentFolder));
+    this.openDialog(NewFilesDialogComponent, false);
   }
 
   openRenameDialog(element: FileElement) {
-    let dialogRef = this.dialog.open(RenameDialogComponent);
-    dialogRef.afterClosed().subscribe(res => {
+    // const dialogRef = this.dialog.open(RenameDialogComponent);
+    // dialogRef.afterClosed().subscribe(res => {
+    //   if (res) {
+    //     element.name = res;
+    //     // this.elementRenamed.emit(element);
+    //   }
+    // });
+    this.openDialog(RenameDialogComponent, res => {
       if (res) {
         element.name = res;
         // this.elementRenamed.emit(element);
@@ -60,9 +66,19 @@ export class FileExplorerViewerComponent implements OnInit {
     });
   }
 
+  private openDialog(name, cb) {
+    const dialogRef = this.dialog.open(name);
+    if(cb) {
+      dialogRef.afterClosed().subscribe(cb());
+    } else {
+      dialogRef.afterClosed().subscribe(() => this.getAllContentByRepo(this.currentFolder));
+    }
+    
+  }
+
   historyBack() {
     this.setCurrentFolder(this.currentFolder.match(/(.*[\\\/])/)[0]);
-    let checkLastCharacter = this.currentFolder.substr(0, this.currentFolder.length - 1);
+    const checkLastCharacter = this.currentFolder.substr(0, this.currentFolder.length - 1);
 
     if (this.currentFolder.endsWith('/')) {
       this.setCurrentFolder(checkLastCharacter);
@@ -86,7 +102,7 @@ export class FileExplorerViewerComponent implements OnInit {
   }
 
   getContent(content: string) {
-    let repo = this.currentFolder + '/' + content;
+    const repo = this.currentFolder + '/' + content;
     this.actualContent = '';
     this.link = '';
     this.setImage('', '');
