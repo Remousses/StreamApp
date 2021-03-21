@@ -36,3 +36,22 @@ video {
 .mat-grid-tile {
     width: 10%;
 }
+
+.scaled-frame {
+    width: 1000px;
+    height: 1100px;
+    margin-left: 24%;
+    border: 0px;
+    zoom: 0.75;
+    -moz-transform: scale(0.75);
+    -moz-transform-origin: 0 0;
+    -o-transform: scale(0.75);
+    -o-transform-origin: 0 0;
+    -webkit-transform: scale(0.75);
+    -webkit-transform-origin: 0 0;
+}
+@media screen and (-webkit-min-device-pixel-ratio:0) {
+    .scaled-frame {
+        zoom: 1;
+    }
+}

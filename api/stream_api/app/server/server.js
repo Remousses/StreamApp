@@ -8,7 +8,7 @@ const fs = require('fs'),
 
 const upload = require('./routes/uploads'),
     video = require('./routes/videos'),
-    image = require('./routes/images'),
+    base64 = require('./routes/base64'),
     audio = require('./routes/audios'),
     mangas = require('./routes/mangas');
 
@@ -21,7 +21,7 @@ app.use("/", upload);
 
 app.use("", video);
 
-app.use("", image);
+app.use("", base64);
 
 app.use("", audio);
 
@@ -63,8 +63,6 @@ function getAllContent(res, repo) {
     fs.readdirSync(dir).forEach(file => {
         contentList.push(file);
     });
-
-    // fs.closeSync();
 
     return res.status(200).send({
         list: contentList,

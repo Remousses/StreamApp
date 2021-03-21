@@ -12,13 +12,14 @@ import { AllowedExtension } from 'src/app/utils/allowedExtension';
   styleUrls: ['./homepage.component.scss']
 })
 export class HomepageComponent implements OnInit {
-  imageJSON: Object = {
+  encodedJSON: Object = {
+    type: '',
     name: '',
     base64: ''
   };
   contentList: Array<string> = [];
-  imageLeft: string = '';
-  imageRight: string = '';
+  dataLeft: string = '';
+  dataRight: string = '';
   allAllowedExtension = AllowedExtension;
 
   fileElements: Observable<FileElement[]>;
@@ -33,37 +34,57 @@ export class HomepageComponent implements OnInit {
     this.contentList = value;
   }
 
-  changeImage(value: { name: string, base64: string }) {
-    this.imageJSON = {
+  changeEncodedJSON(value: { type: string, name: string, base64: string, updateSlider: boolean }) {
+    console.log('changeEncodedJSON', value.type);
+    
+    this.encodedJSON = {
+      type: value.type,
       name: value.name,
-      base64: value.base64
+      base64: value.base64,
+      updateSlider: value.updateSlider
     };
-    this.imageLeft = '';
-    this.imageRight = '';
+console.log("value.updateSlider", value.updateSlider);
 
-    let imagesArray = this.contentList.filter(element => {
-      element = element.toLocaleLowerCase();
+    if (value.updateSlider) {
+      this.dataLeft = '';
+      this.dataRight = '';
+      console.log("value.type", this.encodedJSON);
       
-      if(element.endsWith(this.allAllowedExtension.JPEG)
-            || element.endsWith(this.allAllowedExtension.JPG)
-            || element.endsWith(this.allAllowedExtension.PNG)) {
-              return true;
+      let allAllowedExtensionArray;
+
+      switch (value.type) {
+        case 'image':
+          allAllowedExtensionArray = [
+            this.allAllowedExtension.JPEG,
+            this.allAllowedExtension.JPG,
+            this.allAllowedExtension.PNG
+          ];
+          break;
+        case this.allAllowedExtension.PDF:
+            allAllowedExtensionArray = [
+              this.allAllowedExtension.PDF
+            ];
+            break;
+        default:
+          break;
       }
-    });
-                        
-    imagesArray.forEach((element, key) => {
-      if (value.name === element) {
-        let less = key - 1;
-        let more = key + 1;
-        if (key === 0) {
-          this.imageRight = imagesArray[more];
-        } else if (key === imagesArray.length - 1) {
-          this.imageLeft = imagesArray[less];
-        } else {
-          this.imageRight = imagesArray[more];
-          this.imageLeft = imagesArray[less];
+      
+      const array = this.contentList.filter(element => allAllowedExtensionArray.find(allowed => element.toLocaleLowerCase().endsWith(allowed)));
+                          
+      array.forEach((element, key) => {
+        if (value.name === element) {
+          const less = key - 1;
+          const more = key + 1;
+          if (key === 0) {
+            this.dataRight = array[more];
+          } else if (key === array.length - 1) {
+            this.dataLeft = array[less];
+          } else {
+            this.dataRight = array[more];
+            this.dataLeft = array[less];
+          }
         }
-      }
-    });
+      });
+    }
   }
 }

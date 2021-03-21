@@ -24,10 +24,10 @@ export class FileExplorerViewerComponent implements OnInit {
   actualContent: string = '';
   initRepo: string = common.initRepo;
 
-  @Input() imageJSON;
+  @Input() encodedJSON;
   @Input() contentList;
 
-  @Output() imageDataChange: EventEmitter<string> = new EventEmitter<string>();
+  @Output() encodedJSONDataChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() contentListDataChange: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(private streamService: StreamService,
@@ -87,11 +87,11 @@ export class FileExplorerViewerComponent implements OnInit {
     this.getAllContentByRepo(this.currentFolder);
   }
 
-  private getImage(repo: string): Promise<any> {
+  private getBase64Data(repo: string, type: string): Promise<any> {
     this.loaderService.setSpinnerState(true);
 
     return new Promise((resolve, reject) => {
-      this.streamService.getImage(repo).subscribe(res => {
+      this.streamService.getBase64Data(repo, type).subscribe(res => {
         this.loaderService.setSpinnerState(false);
         resolve(res);
       }, err => {
@@ -101,18 +101,36 @@ export class FileExplorerViewerComponent implements OnInit {
     });
   }
 
+  private setBase64Data(name: string, base64: string, type: string, updateSlider: boolean) {
+    this.encodedJSON = {
+      type,
+      name,
+      base64,
+      updateSlider
+    };
+    
+    this.encodedJSONDataChange.emit(this.encodedJSON);
+  }
+
   getContent(content: string) {
     const repo = this.currentFolder + '/' + content;
     this.actualContent = '';
     this.link = '';
-    this.setImage('', '');
+    this.setBase64Data('', '', '', false);
 
     switch (content.split('.')[1]) {
       case 'jpg':
       case 'jpeg':
       case 'png':
-        this.getImage(repo).then(res => {
-          this.setImage(content, res.image);
+        this.getBase64Data(repo, 'image').then(res => {
+          this.setBase64Data(content, res.data, 'image', true);
+          this.actualContent = content;
+        }).catch(err => console.log('Error from APIs', err));
+        break;
+
+      case 'pdf':
+        this.getBase64Data(repo, 'pdf').then(res => {
+          this.setBase64Data(content, res.data, 'pdf', true);
           this.actualContent = content;
         }).catch(err => console.log('Error from APIs', err));
         break;
@@ -161,14 +179,6 @@ export class FileExplorerViewerComponent implements OnInit {
 
   private setCurrentFolder(value: string) {
     this.currentFolder = value;
-  }
-
-  private setImage(name: string, base64: string) {
-    this.imageJSON = {
-      name,
-      base64
-    };
-    this.imageDataChange.emit(this.imageJSON);
   }
 
   private setLocaleStorage(value?: boolean) {

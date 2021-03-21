@@ -1,4 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
+
 import { StreamService } from 'src/app/services/stream/stream.service';
 import { LoaderService } from 'src/app/services/loader/loader.service';
 import { UploadService } from 'src/app/services/upload/upload.service';
@@ -10,44 +12,42 @@ import { UploadService } from 'src/app/services/upload/upload.service';
 })
 export class ContentViewerComponent implements OnInit {
   @Input() link;
-  @Input() imageJSON;
+  @Input() encodedJSON;
   @Input() currentFolder;
-  @Input() imageLeft;
-  @Input() imageRight;
+  @Input() dataLeft;
+  @Input() dataRight;
   @Input() actualContent;
 
-  @Output() imageDataChange: EventEmitter<string> = new EventEmitter<string>();
+  @Output() encodedJSONDataChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() refreshView: EventEmitter<string> = new EventEmitter<string>();
 
-  constructor(private streamService: StreamService,
+  constructor(private domSanitizer: DomSanitizer,
+              private streamService: StreamService,
               private loaderService: LoaderService,
               private uploadService: UploadService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
-  getImage(imageSelected: string): void {
+  getNextBase64Data(dataSelected: string, type: string): void {
     this.loaderService.setSpinnerState(true);
+console.log('getNextBase64Data', type);
 
-    if (imageSelected) {
+    if (dataSelected) {
       // new Promise<any>((resolve, reject) => {
-      this.streamService.getImage(this.currentFolder + '/' + imageSelected).subscribe(res => {
+      this.streamService.getBase64Data(this.currentFolder + '/' + dataSelected, type).subscribe(res => {
         this.loaderService.setSpinnerState(false);
-        this.imageJSON = {
-          name: imageSelected,
-          base64: res.image
+        this.encodedJSON = {
+          type,
+          name: dataSelected,
+          base64: res.data,
+          updateSlider: true
         };
-        this.imageDataChange.emit(this.imageJSON);
+        this.encodedJSONDataChange.emit(this.encodedJSON);
         // resolve(res);
       }, err => {
         this.loaderService.setSpinnerState(false);
-        console.log('Error from API', err);
-        // reject(err);
-
+        console.log('Error from API to get', type, err);
       });
-      // }).then(res => {
-
-      // }).catch(err => );
     }
   }
 

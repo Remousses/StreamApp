@@ -11,15 +11,20 @@
     </div>
 </div>
 
-
-<div *ngIf="imageJSON.base64" class="container-image" fxLayout="row">
-    <div *ngIf="imageLeft" class="card-image-text-left">
-        <mat-icon class="card-image-arrow" (click)="getImage(imageLeft)">keyboard_arrow_left</mat-icon>
+<div *ngIf="encodedJSON.name" class="container-image" fxLayout="row">
+    <div *ngIf="dataLeft" class="card-image-text-left">
+        <mat-icon class="card-image-arrow" (click)="getNextBase64Data(dataLeft, encodedJSON.type)">keyboard_arrow_left</mat-icon>
     </div>
     <div class="card">
-        <img height="700px" [src]="imageJSON.base64" (click)="getImage(imageRight)">
+        <ng-content *ngIf="encodedJSON.type == 'image'; then image else pdf"></ng-content>
+        <ng-template #image>
+            <img height="700px" [src]="encodedJSON.base64" (click)="getNextBase64Data(dataRight, encodedJSON.type)">
+        </ng-template>
+        <ng-template #pdf>
+            <iframe class="scaled-frame" [src]="domSanitizer.bypassSecurityTrustResourceUrl(encodedJSON.base64)"></iframe>
+        </ng-template>
     </div>
-    <div *ngIf="imageRight" class="card-image-text-right">
-        <mat-icon class="card-image-arrow" (click)="getImage(imageRight)">keyboard_arrow_right</mat-icon>
+    <div *ngIf="dataRight" class="card-image-text-right">
+        <mat-icon class="card-image-arrow" (click)="getNextBase64Data(dataRight, encodedJSON.type)">keyboard_arrow_right</mat-icon>
     </div>
 </div>

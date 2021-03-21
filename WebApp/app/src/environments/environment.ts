@@ -4,9 +4,10 @@
 
 const domaineName = 'http://localhost:8080/';
 const repositoriesUrl = domaineName + 'repositories';
-const searchVideoUrl =  domaineName + 'searchVideo';
-const searchAudioUrl =  domaineName + 'searchAudio';
-const searchImageUrl =  domaineName + 'searchImage';
+const searchVideoUrl = domaineName + 'searchVideo';
+const searchAudioUrl = domaineName + 'searchAudio';
+const searchImageUrl = domaineName + 'searchImage';
+const searchPdfUrl = domaineName + 'searchPdf';
 
 export const environment = {
   production: false,
@@ -14,7 +15,8 @@ export const environment = {
   domaineName,
   searchVideoUrl,
   searchAudioUrl,
-  searchImageUrl
+  searchImageUrl,
+  searchPdfUrl
 };
 
 /*

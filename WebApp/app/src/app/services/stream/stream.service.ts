@@ -10,8 +10,22 @@ export class StreamService {
 
   constructor(private httpClient: HttpClient) { }
 
-  getImage(repo: string){
-    return this.httpClient.get<any>(environment.searchImageUrl + '?path=' + repo);
+  getBase64Data(repo: string, type: string) {
+    let search;
+    switch (type) {
+      case 'image':
+          search = environment.searchImageUrl;
+        break;
+      
+      case 'pdf':
+          search = environment.searchPdfUrl;
+        break;
+    
+      default:
+        break;
+    }
+    
+    return this.httpClient.get<any>(search + '?path=' + repo);
   }
 
   getAllContent(repo: string){

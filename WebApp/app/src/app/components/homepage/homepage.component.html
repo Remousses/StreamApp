@@ -2,7 +2,7 @@
 
 <div style="height: 100%; box-sizing: border-box;">
   <mat-card style="height: 100%; box-sizing: border-box; padding:0">
-    <app-file-explorer-viewer #fileExplorerViewer [imageJSON]="imageJSON" (imageDataChange)="changeImage($event)"
+    <app-file-explorer-viewer #fileExplorerViewer [encodedJSON]="encodedJSON" (encodedJSONDataChange)="changeEncodedJSON($event)"
     [contentList]="contentList" (contentListDataChange)="changeContentList($event)">
   </app-file-explorer-viewer>
 </mat-card>
@@ -11,9 +11,9 @@
 <app-search-mangas #searchMangas [currentFolder]="fileExplorerViewer.currentFolder"
   (refreshView)="fileExplorerViewer.getAllContentByRepo(fileExplorerViewer.currentFolder)"></app-search-mangas>
 
-<app-content-viewer #contentViewer [link]="fileExplorerViewer.link" [imageJSON]="imageJSON"
-  [currentFolder]="fileExplorerViewer.currentFolder" [imageLeft]="imageLeft" [imageRight]="imageRight"
-  (imageDataChange)="changeImage($event)" [actualContent]="fileExplorerViewer.actualContent"
+<app-content-viewer #contentViewer [link]="fileExplorerViewer.link" [encodedJSON]="encodedJSON"
+  [currentFolder]="fileExplorerViewer.currentFolder" [dataLeft]="dataLeft" [dataRight]="dataRight"
+  (encodedJSONDataChange)="changeEncodedJSON($event)" [actualContent]="fileExplorerViewer.actualContent"
   (refreshView)="fileExplorerViewer.getAllContentByRepo(fileExplorerViewer.currentFolder)"></app-content-viewer>
 
 <div class="loading" *ngIf="loaderService.getSpinnerState()">
