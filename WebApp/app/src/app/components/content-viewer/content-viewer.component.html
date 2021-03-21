@@ -4,10 +4,8 @@
     <div class="card" *ngIf="link.includes('mp4')">
         <video [src]="link" controls></video>
     </div>
-
     <div class="card" *ngIf="link.includes('mp3')">
-        <audio controls>
-            <source [src]="link" type="audio/mp3">
+        <audio controls [src]="link" type="audio/mp3">
             Your browser does not support the audio element.
         </audio>
     </div>
