@@ -3,7 +3,7 @@ Reste à faire:
         ☐ Essayer d'utiliser les observable avec si possible les operators
 
     Delete:
-        ☐ Suppression des fichiers audios et vidéos
+        ✔ Suppression des fichiers audios et vidéos @done(21-03-20 18:13)
         ✔ Suppression des images @done(20-02-17 22:50)
 
     Download:
@@ -11,18 +11,22 @@ Reste à faire:
         ☐ Pouvoir télécharger les dossiers
     
     Upload:
-        ☐ Pouvoir uploader les fichiers séparément
-        ☐ Pouvoir uploader les dossiers
+        ✔ Pouvoir uploader les fichiers séparément @done(21-03-20 17:29)
+        ✘ Pouvoir uploader les dossiers @cancelled(21-03-20 18:13)
+    
+    MP3:
+        ✔ Problème lorsque lors je veux changer de fichier audio @done(21-03-20 19:54)
 
     Pdf:
-        ☐ Viewer (href target="_blank" ?)
+        ✔ Viewer @done(21-03-21 17:43)
 
     Responsive:
-        ☐ Mode mobile / tablette plus responsive (file-explorer-viewer)
+        ✔ Mode mobile / tablette plus responsive (file-explorer-viewer) @done(21-03-21 17:43)
 
     shell:
         ✔ mangas-scan.sh revoir car ne fonctionne plus... @done(20-04-29 23:54)
-        Récupération d'images tierces:
-            ☐ Pouvoir récupérer une image sur le net (champ pour renseigner l'url)
-            ☐ Choisir si une ou plusieurs images. Si plusieurs alors choisir si le même début d'url sinon ne pas mettre tous les urls 
-            ☐ Avoir un champ pour spécifier le dossier de destination (par défaut current folder)
+    
+    Récupération d'images tierces:
+        ☐ Pouvoir récupérer une image sur le net (champ pour renseigner l'url)
+        ☐ Choisir si une ou plusieurs images. Si plusieurs alors choisir si le même début d'url sinon ne pas mettre tous les urls 
+        ☐ Avoir un champ pour spécifier le dossier de destination (par défaut current folder)
