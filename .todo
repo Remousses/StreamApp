@@ -5,6 +5,7 @@ Reste à faire:
     Delete:
         ✔ Suppression des fichiers audios et vidéos @done(21-03-20 18:13)
         ✔ Suppression des images @done(20-02-17 22:50)
+        ✔ Refresh content-viewer après delete @done(21-03-28 00:21)
 
     Download:
         ☐ Pouvoir télécharger les fichiers séparément
