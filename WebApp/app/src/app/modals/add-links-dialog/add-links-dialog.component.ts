@@ -41,7 +41,7 @@ export class AddLinksDialogComponent implements OnInit {
   
   removeItem(index: number) {
     // this.inputNumber--;
-    console.log("inedx", index);
+    console.log("index", index);
     
     this.formArray.removeAt(index);
   }

@@ -27,7 +27,7 @@ export class DownloadLinksComponent implements OnInit {
   }
 
   openNewLinksDialog() {
-    let dialogRef = this.dialog.open(AddLinksDialogComponent);
+    const dialogRef = this.dialog.open(AddLinksDialogComponent);
     dialogRef.afterClosed().subscribe(res => {
       console.log('openNewLinksDialog', res);
       // this.allLinks.pus
@@ -37,12 +37,12 @@ export class DownloadLinksComponent implements OnInit {
   download(): void {
     this.loaderService.setSpinnerState(true);
 
-    let formData: FormData = new FormData();
+    const formData: FormData = new FormData();
     formData.append('folderDestination', this.folderDestination);
 
     
 
-    for(let item of this.allLinks){
+    for(const item of this.allLinks){
       console.log("item.value", item.value);
       
       formData.append('links', item.value);

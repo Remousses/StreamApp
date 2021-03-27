@@ -40,10 +40,10 @@ export class NewFilesDialogComponent implements OnInit {
   uploadFiles() {
     this.loaderService.setSpinnerState(true);
 
-    let formData: FormData = new FormData();
+    const formData: FormData = new FormData();
     formData.append('currentFolder', localStorage.getItem('currentFolder'));
 
-    for(let file of this.filesToUpload){
+    for(const file of this.filesToUpload){
       formData.append('files', file);
     };
 

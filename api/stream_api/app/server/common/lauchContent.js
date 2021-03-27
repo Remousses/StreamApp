@@ -1,17 +1,10 @@
 const fs = require('fs'),
     path = require('path');
 
-const errorFile = require('./error');
-
 module.exports = function launchContent(req, res, repo, fileName) {
-    let error = errorFile.checkError(req);
-    if (error) {
-        return res.status(422).json(error);
-    }
+    const extension = fileName.split('.')[1];
 
-    let extension = fileName.split('.')[1];
-
-    let file = path.resolve(__dirname.replace('/app/server/common', '/app'), repo);
+    const file = path.resolve(__dirname.replace('/app/server/common', '/app'), repo);
 
     fs.stat(file, function (err, stats) {
         if (err) {
@@ -19,20 +12,20 @@ module.exports = function launchContent(req, res, repo, fileName) {
                 // 404 Error if file not found
                 return res.sendStatus(404);
             }
-            return res.status(500).send(err);
+            return res.status(500).json(err);
         }
-        let range = req.headers.range;
+        const range = req.headers.range;
 
         if (!range) {
             console.log("Wrong range");
             // 416 Wrong range
             return res.sendStatus(416);
         }
-        let positions = range.replace(/bytes=/, '').split('-');
-        let start = parseInt(positions[0], 10);
-        let total = stats.size;
-        let end = positions[1] ? parseInt(positions[1], 10) : total - 1;
-        let chunksize = (end - start) + 1;
+        const positions = range.replace(/bytes=/, '').split('-');
+        const start = parseInt(positions[0], 10);
+        const total = stats.size;
+        const end = positions[1] ? parseInt(positions[1], 10) : total - 1;
+        const chunksize = (end - start) + 1;
 
         res.writeHead(206, {
             'Content-Range': 'bytes ' + start + '-' + end + '/' + total,
@@ -41,11 +34,8 @@ module.exports = function launchContent(req, res, repo, fileName) {
             'Content-Type': 'video/' + extension
         });
 
-        let stream = fs.createReadStream(file, { start: start, end: end })
-            .on('open', (ddd) => {
-                stream.pipe(res);
-            }).on('error', function (err) {
-                return res.status(200).send(err);
-            });
+        const stream = fs.createReadStream(file, { start: start, end: end })
+            .on('open', _ => stream.pipe(res))
+            .on('error', (err) => res.status(200).json(err));
     });
 }

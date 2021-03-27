@@ -17,7 +17,7 @@ const errorFile = require('./common/error');
 app.use(bodyParser.json());
 app.use(cors());
 
-app.use("/", upload);
+app.use("", upload);
 
 app.use("", video);
 
@@ -30,12 +30,9 @@ app.use("", mangas);
 app.get('/content', [
     check('path').not().isEmpty().withMessage(errorFile.commonErrorMessage)
 ], (req, res) => {
-    let error = errorFile.checkError(req);
-    if (error) {
-        return res.status(422).json(error);
-    }
+    errorFile.checkError(req);
 
-    let repo = req.query.path;
+    const repo = req.query.path;
 
     if (!repo.startsWith('Repositories')) {
         repo = 'Repositories/' + repo;
@@ -56,15 +53,15 @@ app.listen(8080, () => {
 });
 
 function getAllContent(res, repo) {
-    let contentList = [];
-    let dir = path.resolve(__dirname.replace('/app/server', '/app'), repo);
+    const contentList = [];
+    const dir = path.resolve(__dirname.replace('/app/server', '/app'), repo);
     repo = repo.replace('//', '/');
 
     fs.readdirSync(dir).forEach(file => {
         contentList.push(file);
     });
 
-    return res.status(200).send({
+    return res.status(200).json({
         list: contentList,
         path: repo
     });

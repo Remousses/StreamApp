@@ -1,11 +1,11 @@
 const { validationResult } = require('express-validator');
 
 module.exports = {
-    checkError : (req) => {
+    checkError : (req, res) => {
         const errors = validationResult(req)
 
         if (!errors.isEmpty()) {
-            return { errors: errors.array() }
+            return res.status(422).json({ errors: errors.array() })
         }
     },
     commonErrorMessage : 'Ce champ est obligatoire'

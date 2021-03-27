@@ -8,8 +8,10 @@ routes.get('/searchVideo', [
     check('name').not().isEmpty().withMessage(errorFile.commonErrorMessage),
     check('path').not().isEmpty().withMessage(errorFile.commonErrorMessage)
 ], (req, res) => {
-    let videoName = req.query.name;
-    let repo = req.query.path;
+    errorFile.checkError(req, res);
+
+    const videoName = req.query.name;
+    const repo = req.query.path;
 
     console.log('Récupération de la vidéo ' + repo);
 

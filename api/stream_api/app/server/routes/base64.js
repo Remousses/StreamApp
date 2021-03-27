@@ -8,7 +8,9 @@ const errorFile = require('../common/error');
 routes.get('/searchImage', [
     check('path').not().isEmpty().withMessage(errorFile.commonErrorMessage)
 ], (req, res) => {
-    let repo = req.query.path;
+    errorFile.checkError(req, res);
+    
+    const repo = req.query.path;
 
     console.log('Récupération de l\'image ' + repo);
 
@@ -18,7 +20,9 @@ routes.get('/searchImage', [
 routes.get('/searchPdf', [
     check('path').not().isEmpty().withMessage(errorFile.commonErrorMessage)
 ], (req, res) => {
-    let repo = req.query.path;
+    errorFile.checkError(req, res);
+
+    const repo = req.query.path;
 
     console.log('Récupération du pdf ' + repo);
 
@@ -26,11 +30,6 @@ routes.get('/searchPdf', [
 });
 
 function searchImage(req, res, repo, type) {
-    const error = errorFile.checkError(req);
-    if (error) {
-        return res.status(422).json(error);
-    }
-
     const bufferImage = fs.readFileSync(path.resolve(__dirname.replace('/app/server/routes', '/app'), repo));
     let data;
 
@@ -47,7 +46,7 @@ function searchImage(req, res, repo, type) {
     }
 
     if (data) {
-        return res.status(200).send({ data });
+        return res.status(200).json({ data });
     }
     
     return res.status(422).json({
