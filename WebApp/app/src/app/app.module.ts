@@ -28,7 +28,6 @@ import { NewFilesDialogComponent } from './modals/new-files-dialog/new-files-dia
 import { AddLinksDialogComponent } from './modals/add-links-dialog/add-links-dialog.component';
 
 import { CustomCurrentFolder } from './pipes/customCurrentFolder.pipe';
-import { CustomString } from './pipes/customString.pipe';
 import { CustomStringThreeDots } from './pipes/customStringThreeDots.pipe';
 
 import { StreamService } from './services/stream/stream.service';
@@ -39,7 +38,6 @@ import { LoaderService } from './services/loader/loader.service';
   declarations: [
     AppComponent,
     HomepageComponent,
-    CustomString,
     CustomCurrentFolder,
     CustomStringThreeDots,
     FileExplorerViewerComponent,
