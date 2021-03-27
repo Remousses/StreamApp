@@ -11,7 +11,8 @@
 }
 
 .file-or-folder {
-  padding: 8px;
+  margin: 0px 5px;
+  padding: 8px 0px;
   overflow: hidden;
 }
 
@@ -32,25 +33,21 @@
 .spacer {
   flex: 1 1 auto;
 }
+.file-or-folder-text {
+   text-align: center;
+ }
 
-.tooltip .tooltiptext {
+.file-or-folder-text:hover {
+  .file-or-folder-short-text {
+    display: none;
+  }
+  .file-or-folder-long-text {
+    display: block;
+  }
+}
+
+.file-or-folder-long-text {
   display: none;
-  // width: 120px;
-  background-color: black;
-  color: #fff;
-  border-radius: 6px;
-  padding: 5px;
-  /* Position the tooltip */
-  position: initial;
-  z-index: 1;
-}
-
-.tooltip:hover .tooltiptext {
-  display: block;
-}
-
-.tooltip {
-  text-align: center;
 }
 
 .mat-grid-tile .mat-figure {

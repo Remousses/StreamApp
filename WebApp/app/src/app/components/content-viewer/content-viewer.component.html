@@ -1,30 +1,39 @@
 <button mat-raised-button color="primary" style="margin-top: 10px" *ngIf="actualContent" (click)="deleteFile()">Supprimer ce fichier</button>
 
-<div *ngIf="link" fxLayout="row">
-    <div class="card" *ngIf="link.includes('mp4')">
-        <video [src]="link" controls></video>
-    </div>
-    <div class="card" *ngIf="link.includes('mp3')">
-        <audio controls [src]="link" type="audio/mp3">
-            Your browser does not support the audio element.
-        </audio>
+<!-- <h3 *ngIf="link || encodedJSON.name" style="text-align: center;">{{ actualContent }}</h3> -->
+
+<div *ngIf="link">
+    <h3 style="text-align: center;">{{ actualContent }}</h3>
+
+    <div fxLayout="row">
+        <div class="card" *ngIf="link.includes('mp4')">
+            <video [src]="link" controls></video>
+        </div>
+        <div class="card" *ngIf="link.includes('mp3')">
+            <audio controls [src]="link" type="audio/mp3">
+                Your browser does not support the audio element.
+            </audio>
+        </div>
     </div>
 </div>
 
-<div *ngIf="encodedJSON.name" class="container-image" fxLayout="row">
-    <div *ngIf="dataLeft" class="card-image-text-left">
-        <mat-icon class="card-image-arrow" (click)="getNextBase64Data(dataLeft, encodedJSON.type)">keyboard_arrow_left</mat-icon>
-    </div>
-    <div class="card">
-        <ng-content *ngIf="encodedJSON.type == 'image'; then image else pdf"></ng-content>
-        <ng-template #image>
-            <img height="700px" [src]="encodedJSON.base64" (click)="getNextBase64Data(dataRight, encodedJSON.type)">
-        </ng-template>
-        <ng-template #pdf>
-            <iframe class="scaled-frame" [src]="domSanitizer.bypassSecurityTrustResourceUrl(encodedJSON.base64)"></iframe>
-        </ng-template>
-    </div>
-    <div *ngIf="dataRight" class="card-image-text-right">
-        <mat-icon class="card-image-arrow" (click)="getNextBase64Data(dataRight, encodedJSON.type)">keyboard_arrow_right</mat-icon>
+<div *ngIf="encodedJSON.name" class="container-image">
+    <h3 style="text-align: center;">{{ actualContent }}</h3>
+    <div fxLayout="row">
+        <div *ngIf="dataLeft" class="card-image-text-left">
+            <mat-icon class="card-image-arrow" (click)="getNextBase64Data(dataLeft, encodedJSON.type)">keyboard_arrow_left</mat-icon>
+        </div>
+        <div class="card">
+            <ng-content *ngIf="encodedJSON.type == 'image'; then image else pdf"></ng-content>
+            <ng-template #image>
+                <img height="700px" [src]="encodedJSON.base64" (click)="getNextBase64Data(dataRight, encodedJSON.type)">
+            </ng-template>
+            <ng-template #pdf>
+                <iframe class="scaled-frame" [src]="domSanitizer.bypassSecurityTrustResourceUrl(encodedJSON.base64)"></iframe>
+            </ng-template>
+        </div>
+        <div *ngIf="dataRight" class="card-image-text-right">
+            <mat-icon class="card-image-arrow" (click)="getNextBase64Data(dataRight, encodedJSON.type)">keyboard_arrow_right</mat-icon>
+        </div>
     </div>
 </div>
