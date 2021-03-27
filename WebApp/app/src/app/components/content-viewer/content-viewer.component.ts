@@ -19,9 +19,9 @@ export class ContentViewerComponent implements OnInit {
   @Input() actualContent;
 
   @Output() encodedJSONDataChange: EventEmitter<string> = new EventEmitter<string>();
-  @Output() refreshView: EventEmitter<string> = new EventEmitter<string>();
+  @Output() refreshFileExplorerView: EventEmitter<string> = new EventEmitter<string>();
 
-  constructor(private domSanitizer: DomSanitizer,
+  constructor(public domSanitizer: DomSanitizer,
               private streamService: StreamService,
               private loaderService: LoaderService,
               private uploadService: UploadService) { }
@@ -30,20 +30,11 @@ export class ContentViewerComponent implements OnInit {
 
   getNextBase64Data(dataSelected: string, type: string): void {
     this.loaderService.setSpinnerState(true);
-console.log('getNextBase64Data', type);
 
     if (dataSelected) {
-      // new Promise<any>((resolve, reject) => {
       this.streamService.getBase64Data(this.currentFolder + '/' + dataSelected, type).subscribe(res => {
         this.loaderService.setSpinnerState(false);
-        this.encodedJSON = {
-          type,
-          name: dataSelected,
-          base64: res.data,
-          updateSlider: true
-        };
-        this.encodedJSONDataChange.emit(this.encodedJSON);
-        // resolve(res);
+        this.refreshContentView(type, dataSelected, res.data, true);
       }, err => {
         this.loaderService.setSpinnerState(false);
         console.log('Error from API to get', type, err);
@@ -55,11 +46,17 @@ console.log('getNextBase64Data', type);
     if (confirm('Êtes-vous sûr de vouloir supprimer ce fichier ?')) {
       this.uploadService.deleteFile(this.currentFolder, this.actualContent).subscribe(res => {
         this.loaderService.setSpinnerState(false);
-        this.refreshView.emit();
+        this.refreshContentView('', '', '', false);
+        this.refreshFileExplorerView.emit();
       }, err => {
         this.loaderService.setSpinnerState(false);
         console.log('Error from API', err);
       });
     }
+  }
+
+  private refreshContentView(type: string, name: string, base64: string, updateSlider: boolean) {
+    this.encodedJSON = { type, name, base64, updateSlider };
+    this.encodedJSONDataChange.emit(this.encodedJSON);
   }
 }

@@ -9,12 +9,12 @@
 </div>
 
 <app-search-mangas #searchMangas [currentFolder]="fileExplorerViewer.currentFolder"
-  (refreshView)="fileExplorerViewer.getAllContentByRepo(fileExplorerViewer.currentFolder)"></app-search-mangas>
+  (refreshFileExplorerView)="fileExplorerViewer.getAllContentByRepo(fileExplorerViewer.currentFolder)"></app-search-mangas>
 
 <app-content-viewer #contentViewer [link]="fileExplorerViewer.link" [encodedJSON]="encodedJSON"
   [currentFolder]="fileExplorerViewer.currentFolder" [dataLeft]="dataLeft" [dataRight]="dataRight"
   (encodedJSONDataChange)="changeEncodedJSON($event)" [actualContent]="fileExplorerViewer.actualContent"
-  (refreshView)="fileExplorerViewer.getAllContentByRepo(fileExplorerViewer.currentFolder)"></app-content-viewer>
+  (refreshFileExplorerView)="fileExplorerViewer.getAllContentByRepo(fileExplorerViewer.currentFolder)"></app-content-viewer>
 
 <div class="loading" *ngIf="loaderService.getSpinnerState()">
   <mat-spinner></mat-spinner>

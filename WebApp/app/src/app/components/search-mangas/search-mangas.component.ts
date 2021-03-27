@@ -14,7 +14,7 @@ import { UploadService } from 'src/app/services/upload/upload.service';
 export class SearchMangasComponent implements OnInit {
   @Input() currentFolder;
 
-  @Output() refreshView: EventEmitter<string> = new EventEmitter<string>();
+  @Output() refreshFileExplorerView: EventEmitter<string> = new EventEmitter<string>();
 
   searchMangaSuccess: false;
   txtManga: string = '';
@@ -51,6 +51,6 @@ export class SearchMangasComponent implements OnInit {
 
   refresh(): void {
     this.searchMangaSuccess = false;
-    this.refreshView.emit();
+    this.refreshFileExplorerView.emit();
   }
 }

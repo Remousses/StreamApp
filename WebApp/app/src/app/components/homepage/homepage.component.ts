@@ -35,20 +35,16 @@ export class HomepageComponent implements OnInit {
   }
 
   changeEncodedJSON(value: { type: string, name: string, base64: string, updateSlider: boolean }) {
-    console.log('changeEncodedJSON', value.type);
-    
     this.encodedJSON = {
       type: value.type,
       name: value.name,
       base64: value.base64,
       updateSlider: value.updateSlider
     };
-console.log("value.updateSlider", value.updateSlider);
 
     if (value.updateSlider) {
       this.dataLeft = '';
       this.dataRight = '';
-      console.log("value.type", this.encodedJSON);
       
       let allAllowedExtensionArray;
 
