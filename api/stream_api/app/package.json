@@ -21,9 +21,7 @@
     "path": "^0.12.7",
     "request": "^2.88.2",
     "rimraf": "^3.0.2",
-    "shelljs": "^0.8.3",
-    "undefsafe": "^2.0.2",
-    "util": "^0.12.1"
+    "shelljs": "^0.8.3"
   },
   "devDependencies": {},
   "engines": {

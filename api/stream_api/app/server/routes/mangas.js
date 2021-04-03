@@ -1,7 +1,6 @@
 const routes = require('express').Router(),
     shell = require('shelljs'),
-    { check } = require('express-validator'),
-    fs = require('fs');
+    { check } = require('express-validator');
 
 const errorFile = require('../common/error');
 

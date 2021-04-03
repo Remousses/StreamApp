@@ -42,7 +42,7 @@ export class SearchMangasComponent implements OnInit {
       });
     }).then(res => {
       if(res){
-        console.log('Execution du skipt shell terminée');
+        console.log('Execution du script shell terminée');
         this.refresh();
         this.searchMangaSuccess = res;
       }
