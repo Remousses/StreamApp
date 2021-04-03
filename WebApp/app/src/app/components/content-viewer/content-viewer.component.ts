@@ -33,6 +33,7 @@ export class ContentViewerComponent implements OnInit {
 
     if (dataSelected) {
       this.streamService.getBase64Data(this.currentFolder + '/' + dataSelected, type).subscribe(res => {
+        this.actualContent = dataSelected;
         this.loaderService.setSpinnerState(false);
         this.refreshContentView(type, dataSelected, res.data, true);
       }, err => {
