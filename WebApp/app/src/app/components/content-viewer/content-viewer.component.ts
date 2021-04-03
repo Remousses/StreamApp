@@ -20,13 +20,21 @@ export class ContentViewerComponent implements OnInit {
 
   @Output() encodedJSONDataChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() refreshFileExplorerView: EventEmitter<string> = new EventEmitter<string>();
+  @Output() retrieveDataFromLocalStorage: EventEmitter<string> = new EventEmitter<string>();
 
   constructor(public domSanitizer: DomSanitizer,
               private streamService: StreamService,
               private loaderService: LoaderService,
               private uploadService: UploadService) { }
 
-  ngOnInit() { }
+  ngOnInit() {
+    this.getDataFromLocalStorage();
+  }
+
+  private getDataFromLocalStorage(){
+    const content = JSON.parse(localStorage.getItem('actualContent'));
+    this.retrieveDataFromLocalStorage.emit(content.name);
+  }
 
   getNextBase64Data(dataSelected: string, type: string): void {
     this.loaderService.setSpinnerState(true);
@@ -47,6 +55,7 @@ export class ContentViewerComponent implements OnInit {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce fichier ?')) {
       this.uploadService.deleteFile(this.currentFolder, this.actualContent).subscribe(res => {
         this.loaderService.setSpinnerState(false);
+        this.actualContent = '';
         this.refreshContentView('', '', '', false);
         this.refreshFileExplorerView.emit();
       }, err => {

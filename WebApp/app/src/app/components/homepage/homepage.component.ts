@@ -20,7 +20,6 @@ export class HomepageComponent implements OnInit {
   contentList: Array<string> = [];
   dataLeft: string = '';
   dataRight: string = '';
-  allAllowedExtension = AllowedExtension;
 
   fileElements: Observable<FileElement[]>;
   currentRoot: FileElement;
@@ -51,14 +50,14 @@ export class HomepageComponent implements OnInit {
       switch (value.type) {
         case 'image':
           allAllowedExtensionArray = [
-            this.allAllowedExtension.JPEG,
-            this.allAllowedExtension.JPG,
-            this.allAllowedExtension.PNG
+            AllowedExtension.IMAGE.JPEG,
+            AllowedExtension.IMAGE.JPG,
+            AllowedExtension.IMAGE.PNG
           ];
           break;
-        case this.allAllowedExtension.PDF:
+        case 'pdf':
             allAllowedExtensionArray = [
-              this.allAllowedExtension.PDF
+              AllowedExtension.PDF
             ];
             break;
         default:

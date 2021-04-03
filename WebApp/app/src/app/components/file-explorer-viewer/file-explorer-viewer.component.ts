@@ -12,6 +12,7 @@ import { NewFilesDialogComponent } from 'src/app/modals/new-files-dialog/new-fil
 import { LoaderService } from 'src/app/services/loader/loader.service';
 import { UploadService } from 'src/app/services/upload/upload.service';
 import { MobileService } from 'src/app/services/mobile/mobile.service'
+import { AllowedExtension } from 'src/app/utils/allowedExtension';
 
 @Component({
   selector: 'app-file-explorer-viewer',
@@ -34,7 +35,7 @@ export class FileExplorerViewerComponent implements OnInit {
     private dialog: MatDialog,
     private loaderService: LoaderService,
     private uploadService: UploadService,
-    private mobileService: MobileService) {
+    public mobileService: MobileService) {
       this.currentFolder = this.initRepo;
     }
 
@@ -119,30 +120,34 @@ export class FileExplorerViewerComponent implements OnInit {
     this.setBase64Data('', '', '', false);
 
     switch (content.split('.')[1]) {
-      case 'jpg':
-      case 'jpeg':
-      case 'png':
+      case AllowedExtension.IMAGE.JPG:
+      case AllowedExtension.IMAGE.JPEG:
+      case AllowedExtension.IMAGE.PNG:
         this.getBase64Data(repo, 'image').then(res => {
           this.setBase64Data(content, res.data, 'image', true);
           this.actualContent = content;
+          this.setLocaleStorage('CONTENT', res.data);
         }).catch(err => console.log('Error from APIs', err));
         break;
 
-      case 'pdf':
+      case AllowedExtension.PDF:
         this.getBase64Data(repo, 'pdf').then(res => {
           this.setBase64Data(content, res.data, 'pdf', true);
           this.actualContent = content;
+        this.setLocaleStorage('CONTENT', res.data);
         }).catch(err => console.log('Error from APIs', err));
         break;
 
-      case 'mp3':
+      case AllowedExtension.MP3:
         this.link = environment.searchAudioUrl + '?name=' + content + '&path=' + repo;
         this.actualContent = content;
+        this.setLocaleStorage('CONTENT', this.link);
         break;
 
-      case 'mp4':
+      case AllowedExtension.MP4:
         this.link = environment.searchVideoUrl + '?name=' + content + '&path=' + repo;
         this.actualContent = content;
+        this.setLocaleStorage('CONTENT', this.link);
         break;
 
       default:
@@ -157,7 +162,7 @@ export class FileExplorerViewerComponent implements OnInit {
       this.contentList = res.list;
       this.contentListDataChange.emit(this.contentList);
       this.setCurrentFolder(res.path);
-      this.setLocaleStorage();
+      this.setLocaleStorage('FOLDER');
       this.loaderService.setSpinnerState(false);
     },
       err => {
@@ -166,7 +171,7 @@ export class FileExplorerViewerComponent implements OnInit {
           this.contentList = res.list;
           this.contentListDataChange.emit(this.contentList);
           this.setCurrentFolder(res.path);
-          this.setLocaleStorage();
+          this.setLocaleStorage('FOLDER');
           this.loaderService.setSpinnerState(false);
         },
           err => {
@@ -181,18 +186,29 @@ export class FileExplorerViewerComponent implements OnInit {
     this.currentFolder = value;
   }
 
-  private setLocaleStorage(value?: boolean) {
-    if (!localStorage.getItem('currentFolder')) {
-      localStorage.setItem('currentFolder', this.currentFolder);
-    } else {
-      if (value) {
-        this.currentFolder = localStorage.getItem('currentFolder');
-        localStorage.setItem('currentFolder', this.currentFolder);
-        this.getAllContentByRepo(localStorage.getItem('currentFolder'));
-      } else {
-        localStorage.setItem('currentFolder', this.currentFolder);
-        this.currentFolder = localStorage.getItem('currentFolder');
-      }
+  private setLocaleStorage(storage: string, data?: any) {
+    switch (storage) {
+      case 'FOLDER':
+        if (!localStorage.getItem('currentFolder')) {
+          localStorage.setItem('currentFolder', this.currentFolder);
+        } else {
+          localStorage.setItem('currentFolder', this.currentFolder);
+          this.currentFolder = localStorage.getItem('currentFolder');
+        }
+        break;
+      case 'CONTENT':
+        const jsonContent = JSON.stringify({
+          name: this.actualContent, data
+        });
+        if (!localStorage.getItem('actualContent')) {
+          localStorage.setItem('actualContent', jsonContent);
+        } else {
+          localStorage.setItem('actualContent', jsonContent);
+          this.actualContent = JSON.parse(localStorage.getItem('actualContent')).name;
+        }
+        break;
+      default:
+        break;
     }
   }
 

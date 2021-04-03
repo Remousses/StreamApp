@@ -1,8 +1,14 @@
 export const AllowedExtension = {
-    JPG: 'jpg',
-    JPEG: 'jpeg',
-    PNG: 'png',
+    IMAGE: {
+        JPG: 'jpg',
+        JPEG: 'jpeg',
+        PNG: 'png',
+    },
     PDF: 'pdf',
-    XLS: 'xls',
-    XLSX: 'xlsx'
+    EXCEL: {
+        XLS: 'xls',
+        XLSX: 'xlsx'
+    },
+    MP3: 'mp3',
+    MP4: 'mp4'
 }
