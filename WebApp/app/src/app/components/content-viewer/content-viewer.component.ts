@@ -33,7 +33,9 @@ export class ContentViewerComponent implements OnInit {
 
   private getDataFromLocalStorage(){
     const content = JSON.parse(localStorage.getItem('actualContent'));
-    this.retrieveDataFromLocalStorage.emit(content.name);
+    if (content) {
+      this.retrieveDataFromLocalStorage.emit(content.name);
+    }
   }
 
   getNextBase64Data(dataSelected: string, type: string): void {
