@@ -4,7 +4,7 @@ import { Mangas } from 'src/app/utils/mangas';
 import { common } from 'src/app/utils/common';
 
 import { LoaderService } from 'src/app/services/loader/loader.service';
-import { UploadService } from 'src/app/services/upload/upload.service';
+import { SearchService } from 'src/app/services/search/search.service';
 
 @Component({
   selector: 'app-search-mangas',
@@ -16,13 +16,12 @@ export class SearchMangasComponent implements OnInit {
 
   @Output() refreshFileExplorerView: EventEmitter<string> = new EventEmitter<string>();
 
-  searchMangaSuccess: false;
   txtManga: string = '';
   txtMangaChapter: string = '';
   allMangas = Mangas;
   initRepo: string = common.initRepo;
 
-  constructor(private uploadService: UploadService, private loaderService: LoaderService) {}
+  constructor(private searchService: SearchService, private loaderService: LoaderService) {}
 
   ngOnInit() {
     this.allMangas.forEach(manga => {
@@ -33,7 +32,7 @@ export class SearchMangasComponent implements OnInit {
   searchManga(): void {
     this.loaderService.setSpinnerState(true);
     new Promise<any>((resolve, reject) => {
-      this.uploadService.searchManga(this.txtManga, this.txtMangaChapter).subscribe(res => {
+      this.searchService.searchManga(this.txtManga, this.txtMangaChapter).subscribe(res => {
         this.loaderService.setSpinnerState(false);
         resolve(true);
       }, err => {
@@ -44,13 +43,11 @@ export class SearchMangasComponent implements OnInit {
       if(res){
         console.log('Execution du script shell terminée');
         this.refresh();
-        this.searchMangaSuccess = res;
       }
     }).catch(err => console.log('Error from API', err));
   }
 
   refresh(): void {
-    this.searchMangaSuccess = false;
     this.refreshFileExplorerView.emit();
   }
 }

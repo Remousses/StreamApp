@@ -10,7 +10,7 @@ const upload = require('./routes/uploads'),
     video = require('./routes/videos'),
     base64 = require('./routes/base64'),
     audio = require('./routes/audios'),
-    mangas = require('./routes/mangas');
+    search = require('./routes/search');
 
 const errorFile = require('./common/error');
 
@@ -25,7 +25,7 @@ app.use("", base64);
 
 app.use("", audio);
 
-app.use("", mangas);
+app.use("", search);
 
 app.get('/content', [
     check('path').not().isEmpty().withMessage(errorFile.commonErrorMessage)

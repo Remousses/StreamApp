@@ -12,7 +12,7 @@ routes.get('/test', (req, res) => {
     });
 });
 
-routes.get('/mangas/searchManga', [
+routes.get('/searchManga', [
     check('name').not().isEmpty().withMessage(errorFile.commonErrorMessage),
     check('chapter').not().isEmpty().withMessage(errorFile.commonErrorMessage)
 ], (req, res) => {
