@@ -26,6 +26,10 @@ export class AddLinksDialogComponent implements OnInit {
     // this.addLinksForm.addControl("folderName", new FormControl(null, Validators.required))
   }
 
+  cancel() {
+    this.dialogRef.close('cancel');
+  }
+
   get formArray() {
     return <FormArray> this.addLinksForm.get('formArray');
  }

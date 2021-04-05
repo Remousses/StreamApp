@@ -22,7 +22,10 @@ export class NewFilesDialogComponent implements OnInit {
               private loaderService: LoaderService,
               private dialogRef: MatDialogRef<NewFilesDialogComponent>) { }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  cancel() {
+    this.dialogRef.close('cancel');
   }
 
   onFilesChange(event: any) {

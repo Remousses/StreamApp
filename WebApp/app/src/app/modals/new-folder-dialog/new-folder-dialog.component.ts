@@ -21,13 +21,16 @@ export class NewFolderDialogComponent implements OnInit {
               private loaderService: LoaderService,
               private dialogRef: MatDialogRef<NewFolderDialogComponent>) { }
 
-  ngOnInit() {
+  ngOnInit() { }
+
+  cancel() {
+    this.dialogRef.close('cancel');
   }
 
   createFolder() {
     this.loaderService.setSpinnerState(true);
 
-    this.uploadService.createFolder(localStorage.getItem('currentFolder'), this.createFolderForm.value.folderName).subscribe(res => {
+    this.uploadService.createFolder(localStorage.getItem('currentFolder'), this.createFolderForm.value.folderName).subscribe(_ => {
       this.loaderService.setSpinnerState(false);
       this.dialogRef.close();
     }, err => {

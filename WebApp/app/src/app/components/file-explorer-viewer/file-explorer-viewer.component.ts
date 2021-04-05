@@ -44,11 +44,15 @@ export class FileExplorerViewerComponent implements OnInit {
   }
 
   openNewFolderDialog() {
-    this.openDialog(NewFolderDialogComponent, false);
+    this.openDialog(NewFolderDialogComponent);
   }
 
   openNewFilesDialog() {
-    this.openDialog(NewFilesDialogComponent, false);
+    this.openDialog(NewFilesDialogComponent);
+  }
+
+  openNewDownloadDialog(): void {
+
   }
 
   openRenameDialog(element: FileElement) {
@@ -59,22 +63,16 @@ export class FileExplorerViewerComponent implements OnInit {
     //     // this.elementRenamed.emit(element);
     //   }
     // });
-    this.openDialog(RenameDialogComponent, res => {
-      if (res) {
-        element.name = res;
-        // this.elementRenamed.emit(element);
-      }
-    });
+    this.openDialog(RenameDialogComponent);
   }
 
-  private openDialog(name, cb) {
+  private openDialog(name) {
     const dialogRef = this.dialog.open(name);
-    if(cb) {
-      dialogRef.afterClosed().subscribe(cb());
-    } else {
-      dialogRef.afterClosed().subscribe(() => this.getAllContentByRepo(this.currentFolder));
-    }
-    
+    dialogRef.afterClosed().subscribe(cancel => {
+      if (cancel !== 'cancel') {
+        this.getAllContentByRepo(this.currentFolder)
+      }
+    });
   }
 
   historyBack() {
