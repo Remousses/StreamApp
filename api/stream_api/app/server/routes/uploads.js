@@ -131,7 +131,7 @@ function uploadLink(folderDestination, link) {
 
 routes.put('/createFolder', (req, res) => {
     const body = req.body;
-    const folderName = body.folderName;
+    const folderName = body.folderName.trim();
     const dir = body.currentFolder + '/' + folderName;
 
     console.log('Création du dossier ' + folderName + ' en cours');
