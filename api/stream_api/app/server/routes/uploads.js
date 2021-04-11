@@ -2,7 +2,7 @@ const routes = require('express').Router(),
     multer = require('multer'),
     fs = require('fs'),
     { check } = require('express-validator'),
-    rimraf = require("rimraf"),
+    rimraf = require('rimraf'),
     request = require('request');
 
 const storage = multer.diskStorage({
@@ -50,25 +50,20 @@ routes.put('/upload/links', [
 });
 
 function checkUploadLinksErrors(folderDestination, links, errors) {
-    // return new Promise((resolve, reject) => {
-        const allLinks = links.map(link => {
-            return uploadLink(folderDestination, link)
-        })
-        return Promise.all(allLinks).then(res => {
-            console.log("Result of many link upload : ", res);
+    const allLinks = links.map(link => {
+        return uploadLink(folderDestination, link)
+    })
+    return Promise.all(allLinks).then(res => {
+        console.log("Result of many link upload : ", res);
 
-            res.forEach(file => {
-                // console.log("aadeadazdazdzad", file)
-                // console.log("ezzfregse<fwrgdrgfqer", file.err)
-                if (file.err) {
-                    errors.push({ err: file.err });
-                } else {
-                    console.log("yolo", file);
-                }
-            })
-            // return res;
-        });
-    // });
+        res.forEach(file => {
+            if (file.err) {
+                errors.push({ err: file.err });
+            } else {
+                console.log("yolo", file);
+            }
+        })
+    });
 }
 
 function uploadLink(folderDestination, link) {

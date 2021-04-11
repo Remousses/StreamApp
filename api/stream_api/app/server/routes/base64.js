@@ -35,11 +35,11 @@ function searchImage(req, res, repo, type) {
 
     switch (type) {
         case 'image':
-            data = 'data:image/' + repo.split('.')[1] + ';base64,' + new Buffer(bufferImage).toString('base64');
+            data = 'data:image/' + repo.split('.')[1] + ';base64,' + Buffer.from(bufferImage).toString('base64');
             break;
 
         case 'pdf':
-            data = 'data:application/pdf;base64,' + new Buffer(bufferImage).toString('base64');
+            data = 'data:application/pdf;base64,' + Buffer.from(bufferImage).toString('base64');
             break;
         default:
             break;
