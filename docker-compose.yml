@@ -1,0 +1,51 @@
+version: "3.4"
+
+services:
+  stream_app_dev:
+    hostname: stream_app_dev
+    container_name: stream_app_dev
+    build:
+      context: ./WebApp
+      dockerfile: Dockerfile_dev
+    volumes: 
+      - ./WebApp/app:/app
+    ports:
+      - 4200:4200
+    stdin_open: true
+
+  # stream_app_prod:
+  #   hostname: stream_app_prod
+  #   container_name: stream_app_prod
+  #   restart: always
+  #   build:
+  #     context: ./WebApp
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 4200
+
+  stream_api_dev:
+    hostname: stream_api_dev
+    container_name: stream_api_dev
+    build:
+      context: ./api/stream_api
+      dockerfile: Dockerfile_dev
+    volumes: 
+      - ./api/stream_api/app:/app
+    ports:
+      - 8080:8080
+    stdin_open: true
+
+  # stream_api_prod:
+  #   hostname: stream_api_prod
+  #   container_name: stream_api_prod
+  #   restart: always
+  #   build:
+  #     context: ./api
+  #     dockerfile: Dockerfile
+  #   ports:
+  #     - 443
+
+networks: 
+  default:
+    external:
+      name: stream_app_network
