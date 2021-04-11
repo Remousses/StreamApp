@@ -5,10 +5,12 @@
 
     <div fxLayout="row">
         <div class="card" *ngIf="link.includes('mp4')">
-            <video [src]="link" controls></video>
+            <video [src]="link" controls autoplay>
+                Your browser does not support the video element.
+            </video>
         </div>
         <div class="card" *ngIf="link.includes('mp3')">
-            <audio controls [src]="link" type="audio/mp3">
+            <audio controls autoplay [src]="link" type="audio/mp3">
                 Your browser does not support the audio element.
             </audio>
         </div>
@@ -17,23 +19,19 @@
 
 <div *ngIf="encodedJSON.name" fxLayout="row">
     <div class="card-arrow" fxLayout="column">
-        <mat-icon *ngIf="dataLeft" (click)="getNextBase64Data(dataLeft, encodedJSON.type)">keyboard_arrow_left</mat-icon>
+        <mat-icon *ngIf="dataLeft" (click)="getNextData(dataLeft, encodedJSON.type)">keyboard_arrow_left</mat-icon>
     </div>
     <div class="container-image" fxLayout="column">
         <h3 style="text-align: center;">{{ actualContent }}</h3>
         <div fxLayout="row">
-            <div class="card">
-                <ng-content *ngIf="encodedJSON.type == 'image'; then image else pdf"></ng-content>
-                <ng-template #image>
-                    <img height="700px" [src]="encodedJSON.base64" (click)="getNextBase64Data(dataRight, encodedJSON.type)">
-                </ng-template>
-                <ng-template #pdf>
-                    <iframe class="scaled-frame" [src]="domSanitizer.bypassSecurityTrustResourceUrl(encodedJSON.base64)"></iframe>
-                </ng-template>
+            <div class="card" [ngSwitch]="encodedJSON.type">
+                <img *ngSwitchCase="'image'" height="700px" [src]="encodedJSON.base64" (click)="getNextData(dataRight, encodedJSON.type)">
+                <iframe *ngSwitchCase="'pdf'" class="scaled-frame" [src]="domSanitizer.bypassSecurityTrustResourceUrl(encodedJSON.base64)"></iframe>
+                <span *ngSwitchDefault>Aucun viewer disponible</span>
             </div>
         </div>
     </div>
     <div class="card-arrow" fxLayout="column">
-        <mat-icon *ngIf="dataRight" (click)="getNextBase64Data(dataRight, encodedJSON.type)">keyboard_arrow_right</mat-icon>
+        <mat-icon *ngIf="dataRight" (click)="getNextData(dataRight, encodedJSON.type)">keyboard_arrow_right</mat-icon>
     </div>
 </div>

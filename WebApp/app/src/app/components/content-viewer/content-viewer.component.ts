@@ -33,12 +33,14 @@ export class ContentViewerComponent implements OnInit {
 
   private getDataFromLocalStorage(){
     const content = JSON.parse(localStorage.getItem('actualContent'));
+    const repo = localStorage.getItem('currentFolder');
+    
     if (content) {
-      this.retrieveDataFromLocalStorage.emit(content.name);
+      this.retrieveDataFromLocalStorage.emit('localStorage:' + repo + '/' + content.name);
     }
   }
 
-  getNextBase64Data(dataSelected: string, type: string): void {
+  getNextData(dataSelected: string, type: string): void {
     this.loaderService.setSpinnerState(true);
 
     if (dataSelected) {

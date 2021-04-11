@@ -11,7 +11,7 @@ import { RenameDialogComponent } from 'src/app/modals/rename-dialog/rename-dialo
 import { NewFilesDialogComponent } from 'src/app/modals/new-files-dialog/new-files-dialog.component';
 import { LoaderService } from 'src/app/services/loader/loader.service';
 import { UploadService } from 'src/app/services/upload/upload.service';
-import { MobileService } from 'src/app/services/mobile/mobile.service'
+import { MobileService } from 'src/app/services/mobile/mobile.service';
 import { AllowedExtension } from 'src/app/utils/allowedExtension';
 
 @Component({
@@ -112,39 +112,50 @@ export class FileExplorerViewerComponent implements OnInit {
   }
 
   getContent(content: string) {
-    const repo = this.currentFolder + '/' + content;
+    let name: string, repo: string;
+    const checkLocalStorage = content.split(':');
+    if(checkLocalStorage.length == 1) {
+      name = content;
+      repo = this.currentFolder + '/' + content;
+    } else {
+      checkLocalStorage.shift();
+      const splitContent = checkLocalStorage.join('/').split('/');
+      name = splitContent[splitContent.length - 1];
+      repo = splitContent.join('/');
+    }
+
     this.actualContent = '';
     this.link = '';
     this.setBase64Data('', '', '', false);
-
-    switch (content.split('.')[1]) {
+    
+    switch (name.split('.')[1]) {
       case AllowedExtension.IMAGE.JPG:
       case AllowedExtension.IMAGE.JPEG:
       case AllowedExtension.IMAGE.PNG:
         this.getBase64Data(repo, 'image').then(res => {
-          this.setBase64Data(content, res.data, 'image', true);
-          this.actualContent = content;
+          this.setBase64Data(name, res.data, 'image', true);
+          this.actualContent = name;
           this.setLocaleStorage('CONTENT', res.data);
         }).catch(err => console.log('Error from APIs', err));
         break;
 
       case AllowedExtension.PDF:
         this.getBase64Data(repo, 'pdf').then(res => {
-          this.setBase64Data(content, res.data, 'pdf', true);
-          this.actualContent = content;
-        this.setLocaleStorage('CONTENT', res.data);
+          this.setBase64Data(name, res.data, 'pdf', true);
+          this.actualContent = name;
+          this.setLocaleStorage('CONTENT', res.data);
         }).catch(err => console.log('Error from APIs', err));
         break;
 
       case AllowedExtension.MP3:
-        this.link = environment.searchAudioUrl + '?name=' + content + '&path=' + repo;
-        this.actualContent = content;
+        this.link = environment.searchAudioUrl + '?name=' + name + '&path=' + repo;
+        this.actualContent = name;
         this.setLocaleStorage('CONTENT', this.link);
         break;
 
       case AllowedExtension.MP4:
-        this.link = environment.searchVideoUrl + '?name=' + content + '&path=' + repo;
-        this.actualContent = content;
+        this.link = environment.searchVideoUrl + '?name=' + name + '&path=' + repo;
+        this.actualContent = name;
         this.setLocaleStorage('CONTENT', this.link);
         break;
 

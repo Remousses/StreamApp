@@ -55,7 +55,7 @@ export class HomepageComponent implements OnInit {
             AllowedExtension.IMAGE.PNG
           ];
           break;
-        case 'pdf':
+        case AllowedExtension.PDF:
             allAllowedExtensionArray = [
               AllowedExtension.PDF
             ];
@@ -65,7 +65,7 @@ export class HomepageComponent implements OnInit {
       }
       
       const array = this.contentList.filter(element => allAllowedExtensionArray.find(allowed => element.toLocaleLowerCase().endsWith(allowed)));
-                          
+      
       array.forEach((element, key) => {
         if (value.name === element) {
           const less = key - 1;
