@@ -16,13 +16,34 @@ routes.get('/searchManga', [
     check('name').not().isEmpty().withMessage(errorFile.commonErrorMessage),
     check('chapter').not().isEmpty().withMessage(errorFile.commonErrorMessage)
 ], (req, res) => {
-    errorFile.checkError(req, res);
-
+    const error = errorFile.checkError(req);
+    if (error) {
+        return res.status(422).json(error);
+    }
     const name = req.query.name;
     const chapter = req.query.chapter;
     console.log('Trying to search chapter ' + chapter + ' of manga ' + name);
 
     shell.exec('./server/bash-scripts/mangas-scan.sh ' + name + ' ' + chapter);
+
+    return res.status(200).json({
+        res: 'OK'
+    });
+});
+
+routes.get('/searchFileOrFolder', [
+    check('path').not().isEmpty().withMessage(errorFile.commonErrorMessage),
+    check('fileOrFolder').not().isEmpty().withMessage(errorFile.commonErrorMessage)
+], (req, res) => {
+    const error = errorFile.checkError(req);
+    if (error) {
+        return res.status(422).json(error);
+    }
+    const path = req.query.path;
+    const fileOrFolder = req.query.fileOrFolder;
+    console.log('Trying to search ' + fileOrFolder + ' in ' + path);
+
+    // shell.exec('./server/bash-scripts/mangas-scan.sh ' + name + ' ' + chapter);
 
     return res.status(200).json({
         res: 'OK'

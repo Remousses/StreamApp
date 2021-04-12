@@ -30,8 +30,10 @@ app.use("", search);
 app.get('/content', [
     check('path').not().isEmpty().withMessage(errorFile.commonErrorMessage)
 ], (req, res) => {
-    errorFile.checkError(req);
-
+    const error = errorFile.checkError(req);
+    if (error) {
+        return res.status(422).json(error);
+    }
     const repo = req.query.path;
 
     if (!repo.startsWith('Repositories')) {

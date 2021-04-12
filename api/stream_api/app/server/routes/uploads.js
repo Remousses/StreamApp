@@ -35,8 +35,10 @@ routes.put('/upload/links', [
     check('folderDestination').not().isEmpty().withMessage(errorFile.commonErrorMessage),
     check('links').not().isEmpty().withMessage(errorFile.commonErrorMessage)
 ], async (req, res) => {
-    errorFile.checkError(req, res);
-
+    const error = errorFile.checkError(req);
+    if (error) {
+        return res.status(422).json(error);
+    }
     const body = req.body;
     const folderDestination = body.folderDestination + '/';
     const links = body.links;

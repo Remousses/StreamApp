@@ -8,7 +8,10 @@ routes.get('/searchAudio', [
     check('name').not().isEmpty().withMessage(errorFile.commonErrorMessage),
     check('path').not().isEmpty().withMessage(errorFile.commonErrorMessage)
 ], (req, res) => {
-    errorFile.checkError(req, res);
+    const error = errorFile.checkError(req);
+    if (error) {
+        return res.status(422).json(error);
+    }
 
     const audioName = req.query.name;
     const repo = req.query.path;
