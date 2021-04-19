@@ -1,16 +1,9 @@
 const routes = require('express').Router(),
     shell = require('shelljs'),
-    { check } = require('express-validator');
+    { check } = require('express-validator'),
+    find = require('find');
 
 const errorFile = require('../common/error');
-
-routes.get('/test', (req, res) => {
-    shell.exec('./bash-scripts/test.sh one-piece');
-
-    return res.status(200).json({
-        res: 'OK'
-    });
-});
 
 routes.get('/searchManga', [
     check('name').not().isEmpty().withMessage(errorFile.commonErrorMessage),
@@ -31,30 +24,23 @@ routes.get('/searchManga', [
     });
 });
 
-routes.get('/searchFileOrFolder', [
+routes.get('/searchFile', [
     check('path').not().isEmpty().withMessage(errorFile.commonErrorMessage),
-    check('fileOrFolder').not().isEmpty().withMessage(errorFile.commonErrorMessage)
-], (req, res) => {
+    check('fileName').not().isEmpty().withMessage(errorFile.commonErrorMessage)
+], async (req, res) => {
     const error = errorFile.checkError(req);
     if (error) {
         return res.status(422).json(error);
     }
-    const path = req.query.path;
-    const fileOrFolder = req.query.fileOrFolder;
-    console.log('Trying to search ' + fileOrFolder + ' in ' + path);
-
-    // shell.exec('./server/bash-scripts/mangas-scan.sh ' + name + ' ' + chapter);
-
+    let path = req.query.path;
+    path = path && path !== 'null' ? '/app/' + path : '/app/Repositories';
+    const fileName = req.query.fileName;
+    
+    console.log('Trying to search ' + fileName + ' in ' + path);
+    // '[\/]' + fileName + '([a-zA-Z0-9]?)\.'
+    const search = data => data.replace('/app/', '');
     return res.status(200).json({
-        res: 'OK'
-    });
-});
-
-routes.get('/mangas/dlCA', (req, res) => {
-    shell.exec('./server/bash-scripts/dl-ca.sh');
-
-    return res.status(200).json({
-        res: 'OK'
+        files: find.fileSync(new RegExp(fileName), path).filter(file => new RegExp('.*' + fileName + '([a-zA-Z0-9]?)\.?').test(file)).map(search)
     });
 });
 

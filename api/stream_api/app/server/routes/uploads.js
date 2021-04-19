@@ -52,9 +52,7 @@ routes.put('/upload/links', [
 });
 
 function checkUploadLinksErrors(folderDestination, links, errors) {
-    const allLinks = links.map(link => {
-        return uploadLink(folderDestination, link)
-    })
+    const allLinks = links.map(link => uploadLink(folderDestination, link))
     return Promise.all(allLinks).then(res => {
         console.log("Result of many link upload : ", res);
 

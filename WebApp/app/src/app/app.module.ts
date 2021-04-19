@@ -8,7 +8,8 @@ import {
   MatIconModule, MatFormFieldModule, MatToolbarModule,
   MatGridListModule, MatMenuModule,
   MatDialogModule, MatButtonModule, MatCardModule,
-  MatProgressSpinnerModule, MatTooltipModule
+  MatProgressSpinnerModule, MatTooltipModule,
+  MatListModule
 } from '@angular/material';
 import { FlexLayoutModule } from "@angular/flex-layout";
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -26,6 +27,7 @@ import { NewFolderDialogComponent } from './modals/new-folder-dialog/new-folder-
 import { RenameDialogComponent } from './modals/rename-dialog/rename-dialog.component';
 import { NewFilesDialogComponent } from './modals/new-files-dialog/new-files-dialog.component';
 import { AddLinksDialogComponent } from './modals/add-links-dialog/add-links-dialog.component';
+import { SearchFileDialogComponent } from './modals/search-file-dialog/search-file-dialog.component';
 
 import { CustomCurrentFolder } from './pipes/customCurrentFolder.pipe';
 import { CustomStringThreeDots } from './pipes/customStringThreeDots.pipe';
@@ -33,6 +35,7 @@ import { CustomStringThreeDots } from './pipes/customStringThreeDots.pipe';
 import { StreamService } from './services/stream/stream.service';
 import { UploadService } from './services/upload/upload.service';
 import { LoaderService } from './services/loader/loader.service';
+import { SearchFileComponent } from './components/search-file/search-file.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +50,9 @@ import { LoaderService } from './services/loader/loader.service';
     NewFolderDialogComponent,
     RenameDialogComponent,
     NewFilesDialogComponent,
-    AddLinksDialogComponent
+    AddLinksDialogComponent,
+    SearchFileComponent,
+    SearchFileDialogComponent
   ],
   imports: [
     BrowserModule,
@@ -70,10 +75,11 @@ import { LoaderService } from './services/loader/loader.service';
     MatDialogModule,
     MatButtonModule,
     MatCardModule,
-    MatTooltipModule
+    MatTooltipModule,
+    MatListModule
   ],
   providers: [StreamService, UploadService, LoaderService],
-  entryComponents: [NewFolderDialogComponent, RenameDialogComponent, NewFilesDialogComponent, AddLinksDialogComponent],
+  entryComponents: [NewFolderDialogComponent, RenameDialogComponent, NewFilesDialogComponent, AddLinksDialogComponent, SearchFileDialogComponent],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

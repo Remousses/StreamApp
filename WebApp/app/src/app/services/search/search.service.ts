@@ -13,4 +13,8 @@ export class SearchService {
   searchManga(name: string, chapter: string){
     return this.httpClient.get<any>(environment.domaineName + 'searchManga?name=' + name + '&chapter=' + chapter);
   }
+
+  searchFile(repo: string, fileName: string) {
+    return this.httpClient.get<any>(environment.domaineName + 'searchFile?path=' + repo + '&fileName=' + fileName);
+  }
 }

@@ -1,0 +1,12 @@
+<h1 mat-dialog-title>Résultat pour {{ fileName }}</h1>
+
+<mat-dialog-content>
+    <mat-action-list>
+        <span *ngIf="files.length === 0">Aucun nom de fichier ne correspond</span>
+        <button mat-list-item *ngFor="let file of files" (click)="close(file)">{{ file }}</button>
+    </mat-action-list>
+</mat-dialog-content>
+
+<mat-dialog-actions>
+    <a mat-raised-button (click)="close()">Close</a>
+</mat-dialog-actions>

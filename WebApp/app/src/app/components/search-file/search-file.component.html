@@ -1,0 +1,7 @@
+<div class="container-download-links">
+    <mat-form-field>
+        <input #fileNameInput="ngModel" matInput [(ngModel)]="fileName" placeholder="Rechercher un fichier" pattern=".*\.(\w|-){3,}">
+    </mat-form-field>
+    
+    <mat-icon class="pointer" *ngIf="fileNameInput.dirty && fileNameInput.valid" (click)="searchFile()">search</mat-icon>
+</div>

@@ -20,6 +20,7 @@ import { AllowedExtension } from 'src/app/utils/allowedExtension';
   styleUrls: ['./file-explorer-viewer.component.scss']
 })
 export class FileExplorerViewerComponent implements OnInit {
+  private regexFolder = /(.*[\\\/])/;
   link: string = '';
   currentFolder: string = '';
   actualContent: string = '';
@@ -76,7 +77,7 @@ export class FileExplorerViewerComponent implements OnInit {
   }
 
   historyBack() {
-    this.setCurrentFolder(this.currentFolder.match(/(.*[\\\/])/)[0]);
+    this.setCurrentFolder(this.currentFolder.match(this.regexFolder)[0]);
     const checkLastCharacter = this.currentFolder.substr(0, this.currentFolder.length - 1);
 
     if (this.currentFolder.endsWith('/')) {
@@ -111,10 +112,15 @@ export class FileExplorerViewerComponent implements OnInit {
     this.encodedJSONDataChange.emit(this.encodedJSON);
   }
 
-  getContent(content: string) {
+  getContent(content: string, searchFile?: boolean) {
     let name: string, repo: string;
     const checkLocalStorage = content.split(':');
-    if(checkLocalStorage.length == 1) {
+    
+    if (searchFile) {
+      const lastSlash = /[^/]*$/;
+      name = lastSlash.exec(content)[0];
+      repo = content;
+    } else if(checkLocalStorage.length == 1) {
       name = content;
       repo = this.currentFolder + '/' + content;
     } else {
@@ -226,7 +232,7 @@ export class FileExplorerViewerComponent implements OnInit {
       this.uploadService.deleteFolder(this.currentFolder).subscribe(res => {
         if(res.folderDeleted) {
           this.loaderService.setSpinnerState(false);
-          this.getAllContentByRepo(this.currentFolder.match(/(.*[\\\/])/)[0].slice(0, -1));
+          this.getAllContentByRepo(this.currentFolder.match(this.regexFolder)[0].slice(0, -1));
         }
       }, err => {
         this.loaderService.setSpinnerState(false);

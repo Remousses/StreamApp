@@ -26,8 +26,7 @@ export class HomepageComponent implements OnInit {
 
   constructor(public loaderService: LoaderService) { }
 
-  ngOnInit() {
-  }
+  ngOnInit() { }
 
   changeContentList(value: Array<string>) {
     this.contentList = value;
