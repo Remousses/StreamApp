@@ -31,23 +31,24 @@ routes.put('/uploads/files', upload.array('files'), (req, res, next) => {
     return res.json({ filesOploaded: true });
 });
 
-routes.put('/upload/links', [
+routes.put('/uploads/links', [
     check('folderDestination').not().isEmpty().withMessage(errorFile.commonErrorMessage),
     check('links').not().isEmpty().withMessage(errorFile.commonErrorMessage)
 ], async (req, res) => {
-    const error = errorFile.checkError(req);
-    if (error) {
-        return res.status(422).json(error);
+    const errors = errorFile.checkError(req);
+    if (errors) {
+        return res.status(422).json(errors);
     }
+
     const body = req.body;
     const folderDestination = body.folderDestination + '/';
     const links = body.links;
 
-    const errors = [];
-    const allLinks = await checkUploadLinksErrors(folderDestination, links, errors);
+    const err = [];
+    const allLinks = await checkUploadLinksErrors(folderDestination, links, err);
     
-    return errors.length != 0
-        ? res.status(400).json({ err: errors })
+    return err.length !== 0
+        ? res.status(400).json(err)
         : res.status(200).json({ res: allLinks });
 });
 
@@ -59,8 +60,6 @@ function checkUploadLinksErrors(folderDestination, links, errors) {
         res.forEach(file => {
             if (file.err) {
                 errors.push({ err: file.err });
-            } else {
-                console.log("yolo", file);
             }
         })
     });
@@ -74,8 +73,6 @@ function uploadLink(folderDestination, link) {
 
         console.log('Création du fichier ' + fileName + ' dans le dossier ' + folderDestination)
 
-        const file = fs.createWriteStream(path);
-
         // on lance le téléchargement
         const sendReq = request.get(link);
 
@@ -86,6 +83,29 @@ function uploadLink(folderDestination, link) {
                 error = true;
                 linkError.error.statusCode = statusCode;
                 reject({ err : linkError });
+            } else {
+                const file = fs.createWriteStream(path);
+
+                // écrit directement le fichier téléchargé
+                sendReq.pipe(file);
+
+                // lorsque le téléchargement est terminé on appelle le callback
+                file.on('finish', () => {
+                    // close étant asynchrone, le cb est appelé lorsque close a terminé
+                    file.close(_ => console.log('File ' + fileName +  ' was successfully closed'));
+                    resolve({ res: 'File ' + fileName + ' was successfully uploaded'})
+                });
+        
+                // si on rencontre une erreur lors de l'écriture du fichier
+                // on efface le fichier puis on passe l'erreur au callback
+                file.on('error', err => {
+                    // on efface le fichier sans attendre son effacement
+                    // on ne vérifie pas non plus les erreur pour l'effacement
+                    console.log('Une erreur c\'est produit, suppression du fichier', err.message);
+                    fs.unlink(path);
+                    linkError.error.write = err.message;
+                    reject({ err : linkError });
+                });
             }
         });
 
@@ -98,29 +118,8 @@ function uploadLink(folderDestination, link) {
             linkError.error.request = err.message;
             reject({ err : linkError });
         });
-
-        // écrit directement le fichier téléchargé
-        sendReq.pipe(file);
-
-        // lorsque le téléchargement est terminé on appelle le callback
-        file.on('finish', () => {
-            // close étant asynchrone, le cb est appelé lorsque close a terminé
-            file.close(_ => console.log('File ' + fileName +  ' was successfully closed'));
-            resolve({ res: 'File ' + fileName + ' was successfully uploaded'})
-        });
-
-        // si on rencontre une erreur lors de l'écriture du fichier
-        // on efface le fichier puis on passe l'erreur au callback
-        file.on('error', (err) => {
-            // on efface le fichier sans attendre son effacement
-            // on ne vérifie pas non plus les erreur pour l'effacement
-            console.log('Une erreur c\'est produit, suppression du fichier', err.message);
-            fs.unlink(path);
-            linkError.error.write = err.message;
-            reject({ err : linkError });
-        });
     }).catch(err => {
-        return err;
+        return { err };
     });
 }
 

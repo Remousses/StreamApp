@@ -21,7 +21,6 @@ import { HomepageComponent } from './components/homepage/homepage.component';
 import { FileExplorerViewerComponent } from './components/file-explorer-viewer/file-explorer-viewer.component';
 import { SearchMangasComponent } from './components/search-mangas/search-mangas.component';
 import { ContentViewerComponent } from './components/content-viewer/content-viewer.component';
-import { DownloadLinksComponent } from './components/download-links/download-links.component';
 
 import { NewFolderDialogComponent } from './modals/new-folder-dialog/new-folder-dialog.component';
 import { RenameDialogComponent } from './modals/rename-dialog/rename-dialog.component';
@@ -46,7 +45,6 @@ import { SearchFileComponent } from './components/search-file/search-file.compon
     FileExplorerViewerComponent,
     SearchMangasComponent,
     ContentViewerComponent,
-    DownloadLinksComponent,
     NewFolderDialogComponent,
     RenameDialogComponent,
     NewFilesDialogComponent,

@@ -10,9 +10,7 @@ import { LoaderService } from 'src/app/services/loader/loader.service';
   styleUrls: ['./add-links-dialog.component.scss']
 })
 export class AddLinksDialogComponent implements OnInit {
-  private validate = new EventEmitter();
   addLinksForm: FormGroup;
-  // inputNumber: number = 0;
 
   constructor(private uploadService: UploadService,
               private formBuilder: FormBuilder,
@@ -21,45 +19,42 @@ export class AddLinksDialogComponent implements OnInit {
 
   ngOnInit() {
     this.addLinksForm = this.formBuilder.group({
-      formArray: this.formBuilder.array([])
+      formArray: this.formBuilder.array([this.formBuilder.control('', Validators.required)])
     });
-    // this.addLinksForm.addControl("folderName", new FormControl(null, Validators.required))
   }
 
   cancel() {
-    this.dialogRef.close('cancel');
+    // this.dialogRef.close('cancel');
+    this.dialogRef.close();
   }
 
   get formArray() {
-    return <FormArray> this.addLinksForm.get('formArray');
+    return this.addLinksForm.get('formArray') as FormArray;
  }
 
   addItem(): void {
-    // this.inputNumber++;
-    this.formArray.push(this.formBuilder.group({
-      link: new FormControl('')
-    }));
-
-    // this.formBuilder.control(false)
+    this.formArray.push(this.formBuilder.control('', Validators.required));
   }
-  
+
   removeItem(index: number) {
-    // this.inputNumber--;
-    console.log("index", index);
-    
     this.formArray.removeAt(index);
   }
 
-  validateLinks(): void{
-    console.log("this.formArray.controls", this.formArray.controls);
+  validateLinks(): void {
+      this.loaderService.setSpinnerState(true);
 
-    this.formArray.controls.forEach((element: any) => {
-      console.log("element", element);
-      console.log("element value", element.value);
-      console.log("element value link", element.value.link);
-      
-    })
-    
-    // this.validate.emit(this.formArray.controls);
+      const dataToSend = {
+        folderDestination: localStorage.getItem('currentFolder'),
+        links: this.addLinksForm.controls.formArray.value
+      };
+
+      this.uploadService.uploadLinks(dataToSend).subscribe(_ => {
+        this.loaderService.setSpinnerState(false);
+        this.dialogRef.close();
+      }, err => {
+        this.dialogRef.close();
+        this.loaderService.setSpinnerState(false);
+        console.log(err);
+      });
   }
 }

@@ -5,7 +5,7 @@
   <span style="margin-left: 8px"> {{ currentFolder | customCurrentFolder }} </span>
   <span class="spacer"></span>
   <div class="icon-spacer">
-    <mat-icon class="pointer" *ngIf="currentFolder != initRepo" (click)="deleteFolder()" title="Supprimer un dossier">
+    <mat-icon class="pointer" *ngIf="currentFolder != initRepo" (click)="deleteFolder()" title="Supprimer le dossier">
       delete
     </mat-icon>
   </div>
@@ -17,6 +17,11 @@
   <div class="icon-spacer">
     <mat-icon class="pointer" (click)="openNewFolderDialog()" title="Créer un dossier">
       create_new_folder
+    </mat-icon>
+  </div>
+  <div class="icon-spacer">
+    <mat-icon class="pointer" (click)="openNewLinksDialog()" title="Ajouter des liens">
+      add_link
     </mat-icon>
   </div>
   <div class="icon-spacer">

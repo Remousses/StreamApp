@@ -14,8 +14,9 @@ export class UploadService {
     return this.httpClient.put<any>(environment.domaineName + 'uploads/files', formData);
   }
 
-  uploadLinks(formData: FormData) {
-    return this.httpClient.put<any>(environment.domaineName + 'uploads/links', formData);
+  uploadLinks(dataToSend: any) {
+    return this.httpClient.put<any>(environment.domaineName + 'uploads/links', dataToSend);
+    // return this.httpClient.put<any>(environment.domaineName + 'uploads/links?folderDestination=' + currentFolder + '&links=' + links.toString);
   }
 
   createFolder(currentFolder: string, folderName: string) {

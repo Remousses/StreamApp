@@ -2,15 +2,11 @@
 
 <form [formGroup]="addLinksForm" (ngSubmit)="validateLinks()">
     <mat-dialog-content fxLayout="column">
-        <div fxLayout="row">
-            <mat-icon (click)="addItem()">add</mat-icon>
-        </div>
-
         <div fxLayout="row" formArrayName="formArray" 
             *ngFor="let link of formArray.controls; index as i">
             <div fxLayout="row">
                 <mat-form-field fxLayout="column">
-                    <input matInput placeholder="Lien du fichier" formControlName="link" />
+                    <input matInput placeholder="Lien de l'url" [formControlName]="i" />
                 </mat-form-field>
                 <mat-icon fxLayout="column" (click)="removeItem(i)">remove</mat-icon>
             </div>
@@ -19,9 +15,10 @@
     </mat-dialog-content>
     
     <mat-dialog-actions>
-      <a mat-raised-button (click)="cancel()">Cancel</a>
+    <a mat-raised-button (click)="cancel()">Cancel</a>
+    <a mat-raised-button (click)="addItem()">Ajouter</a>
       <button mat-raised-button color="primary" [disabled]="addLinksForm.invalid" type="submit">
-        Créer
+        Upload
       </button>
     </mat-dialog-actions>
 </form>

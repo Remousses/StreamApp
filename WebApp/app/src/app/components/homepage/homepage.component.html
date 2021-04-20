@@ -1,13 +1,6 @@
-<div fxLayout="row" fxLayoutAlign="space-between">
-  <div fxLayout="column">
-    <app-search-file [currentFolder]="fileExplorerViewer.currentFolder"
-      (getContent)="fileExplorerViewer.getContent($event, true)"
-      (getAllContentByRepo)="fileExplorerViewer.getAllContentByRepo($event)"></app-search-file>
-  </div>
-  <div fxLayout="column">
-    <app-download-links></app-download-links>
-  </div>
-</div>
+<app-search-file [currentFolder]="fileExplorerViewer.currentFolder"
+  (getContent)="fileExplorerViewer.getContent($event, true)"
+  (getAllContentByRepo)="fileExplorerViewer.getAllContentByRepo($event)"></app-search-file>
 
 <div style="height: 100%; box-sizing: border-box;">
   <mat-card style="height: 100%; box-sizing: border-box; padding:0">

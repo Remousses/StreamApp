@@ -13,6 +13,7 @@ import { LoaderService } from 'src/app/services/loader/loader.service';
 import { UploadService } from 'src/app/services/upload/upload.service';
 import { MobileService } from 'src/app/services/mobile/mobile.service';
 import { AllowedExtension } from 'src/app/utils/allowedExtension';
+import { AddLinksDialogComponent } from 'src/app/modals/add-links-dialog/add-links-dialog.component';
 
 @Component({
   selector: 'app-file-explorer-viewer',
@@ -52,6 +53,10 @@ export class FileExplorerViewerComponent implements OnInit {
     this.openDialog(NewFilesDialogComponent);
   }
 
+  openNewLinksDialog() {
+    this.openDialog(AddLinksDialogComponent);
+  }
+
   openNewDownloadDialog(): void {
 
   }
@@ -67,7 +72,7 @@ export class FileExplorerViewerComponent implements OnInit {
     this.openDialog(RenameDialogComponent);
   }
 
-  private openDialog(name) {
+  private openDialog(name: any) {
     const dialogRef = this.dialog.open(name);
     dialogRef.afterClosed().subscribe(cancel => {
       if (cancel !== 'cancel') {
