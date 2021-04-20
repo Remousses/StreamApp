@@ -62,6 +62,7 @@ export class ContentViewerComponent implements OnInit {
         this.actualContent = '';
         this.refreshContentView('', '', '', false);
         this.refreshFileExplorerView.emit();
+        localStorage.removeItem('actualContent');
       }, err => {
         this.loaderService.setSpinnerState(false);
         console.log('Error from API', err);
