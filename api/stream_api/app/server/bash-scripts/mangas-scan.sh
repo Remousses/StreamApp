@@ -12,6 +12,7 @@ cd ./$folderName
 
 mkdir -p "$mangasPath"
 DL_DIR=./$mangasPath
+url='https://lelscans.net/mangas/'$manga'/'$chapter'/'
 
 echo 'Scan will be downloaded in '$folderName'/'$mangasPath
 
@@ -19,24 +20,23 @@ cd "$DL_DIR"
 i=0
 while true
 do
-    if ((i < 10))
-    then
-        file='0'$i'.jpg'
-        if [ ! -f "$file" ]
-        then
-            echo 'Trying to get jpg 0 '$i
-            wget 'https://lelscans.net/mangas/'$manga'/'$chapter'/0'$i'.jpg' || break
+    if ((i < 10)); then
+        jpg='0'$i'.jpg'
+        png='0'$i'.png'
+        if [ -f "$jpg" ] || [ -f "$png" ];  then
+            echo 'File 0'$i' already exist'
         else
-            echo 'File '$file' already exist'
+            echo 'Trying to get image 0'$i
+            wget $url$jpg || wget $url$png || break
         fi
     else
-        file=$i'.jpg'
-        if [ ! -f "$file" ]
-        then
-            echo 'Trying to get jpg '$i
-            wget 'https://lelscans.net/mangas/'$manga'/'$chapter'/'$i'.jpg' || break
+        jpg=$i'.jpg'
+        png=$i'.png'
+        if [ -f "$jpg" ] || [ -f "$png" ]; then
+            echo 'File '$i' already exist'
         else
-            echo 'File '$file' already exist'
+            echo 'Trying to get image '$i
+            wget $url$jpg || $url$png || break
         fi
     fi
     ((i++))
