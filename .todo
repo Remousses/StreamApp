@@ -1,48 +1,20 @@
-Reste à faire:
 Delete:
-    ✔ Suppression des fichiers audios et vidéos @done(21-03-20 18:13)
-    ✔ Suppression des images @done(20-02-17 22:50)
-    ✔ Refresh content-viewer après delete @done(21-03-28 00:21)
     ☐ Boutton de suppresion dans file explorer pour supprimer des dossiers / fichiers est non juste le dossier actuel
-    ✔ Supprimer l'élément en cache s'il y est @done(21-04-20 23:02)
 
 Download:
     ☐ Pouvoir télécharger les fichiers séparément
     ☐ Pouvoir télécharger les dossiers
 
-Upload:
-    ✔ Pouvoir uploader les fichiers séparément @done(21-03-20 17:29)
-    ✘ Pouvoir uploader les dossiers @cancelled(21-03-20 18:13)
-
-MP3:
-    ✔ Problème lorsque lors je veux changer de fichier audio @done(21-03-20 19:54)
-
 File explorer:
     ☐ Essayer de prévisualiser les miniatures
     ☐ Essayer de refaire un menu contextuel
 
-Responsive:
-    ✔ Mode mobile / tablette plus responsive (file-explorer-viewer) @done(21-03-21 17:43)
-
-shell:
-    ✔ mangas-scan.sh revoir car ne fonctionne plus... @done(20-04-29 23:54)
-
 content viewer:
-    ✔ Mettre en cache l'élement sélectionné @done(21-04-03 20:21)
-    ✔ Viewer de PDF @done(21-03-21 17:43)
     ☐ Viewer PPT / docx
     ☐ Si repo = musiques alors permettre la possibilité de créer un playlist (stockage dans une mongoDB) (avoir onglet par type musique / vidéo / image ...). Voir exemple sur plex ou kodi  (Voir pour faire du micro front end pour cette partie)
     ☐ Si repo = vidéos ou musiques alors permettre la possibilité de mettre en favori et de voir le nombre d'écoute (musique) / nombre de vu (vidéo)
     ☐ Essayer de pouvoir boucler sur les vidéos ou audios automatiquement (ajouter un bouton permettant cette action facultative)
     ☐ Boutton d'information sur le fichier
-
-Récupération d'images tierces:
-    ✔ Pouvoir récupérer une image sur le net (champ pour renseigner l'url) @done(21-04-21 22:29)
-    ✔ Choisir si une ou plusieurs images. @done(21-04-21 22:29)
-    ✘ Avoir un champ pour spécifier le dossier de destination (par défaut current folder) @cancelled(21-04-21 22:29)
-
-Recherche:
-    ✔ Avoir la possibilité de rechercher des fichiers @done(21-04-20 21:28)
 
 Communication interne:
     ☐ Voir pour privilégier NGX plutôt que mes EventEmitter...
@@ -52,3 +24,21 @@ CI/CD:
 
 VPN:
     ☐ Mise en place d'un VPN pour accèder au site à l'extérieur
+
+
+Archive:
+  ✔ Suppression des fichiers audios et vidéos @done(21-03-20 18:13) @project(Delete)
+  ✔ Suppression des images @done(20-02-17 22:50) @project(Delete)
+  ✔ Refresh content-viewer après delete @done(21-03-28 00:21) @project(Delete)
+  ✔ Supprimer l'élément en cache s'il y est @done(21-04-20 23:02) @project(Delete)
+  ✔ Pouvoir uploader les fichiers séparément @done(21-03-20 17:29) @project(Upload)
+  ✘ Pouvoir uploader les dossiers @cancelled(21-03-20 18:13) @project(Upload)
+  ✔ Problème lorsque lors je veux changer de fichier audio @done(21-03-20 19:54) @project(MP3)
+  ✔ Mode mobile / tablette plus responsive (file-explorer-viewer) @done(21-03-21 17:43) @project(Responsive)
+  ✔ mangas-scan.sh revoir car ne fonctionne plus... @done(20-04-29 23:54) @project(shell)
+  ✔ Mettre en cache l'élement sélectionné @done(21-04-03 20:21) @project(content viewer)
+  ✔ Viewer de PDF @done(21-03-21 17:43) @project(content viewer)
+  ✔ Pouvoir récupérer une image sur le net (champ pour renseigner l'url) @done(21-04-21 22:29) @project(Récupération d'images tierces)
+  ✔ Choisir si une ou plusieurs images. @done(21-04-21 22:29) @project(Récupération d'images tierces)
+  ✘ Avoir un champ pour spécifier le dossier de destination (par défaut current folder) @cancelled(21-04-21 22:29) @project(Récupération d'images tierces)
+  ✔ Avoir la possibilité de rechercher des fichiers @done(21-04-20 21:28) @project(Recherche)
