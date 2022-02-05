@@ -53,11 +53,11 @@ export class FileExplorerViewerComponent implements OnInit {
     this.openDialog(NewFilesDialogComponent);
   }
 
-  openNewLinksDialog() {
+  openLinksDialog() {
     this.openDialog(AddLinksDialogComponent);
   }
 
-  openNewDownloadDialog(): void {
+  openDownloadFolderDialog(): void {
 
   }
 

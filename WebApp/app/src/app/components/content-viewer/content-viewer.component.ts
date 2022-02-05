@@ -55,7 +55,7 @@ export class ContentViewerComponent implements OnInit {
     }
   }
 
-  deleteFile() {
+  deleteFile(): void {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce fichier ?')) {
       this.uploadService.deleteFile(this.currentFolder, this.actualContent).subscribe(res => {
         this.loaderService.setSpinnerState(false);
@@ -73,5 +73,9 @@ export class ContentViewerComponent implements OnInit {
   private refreshContentView(type: string, name: string, base64: string, updateSlider: boolean) {
     this.encodedJSON = { type, name, base64, updateSlider };
     this.encodedJSONDataChange.emit(this.encodedJSON);
+  }
+
+  downloadFile(): void {
+    
   }
 }

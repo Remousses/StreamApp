@@ -1,4 +1,13 @@
-<button mat-raised-button color="primary" style="margin-top: 10px" *ngIf="actualContent" (click)="deleteFile()">Supprimer ce fichier</button>
+<div *ngIf="actualContent">
+    <div style="display:inline;">
+        <button mat-raised-button color="primary" style="margin-top: 10px" (click)="deleteFile()">Supprimer ce fichier</button>
+    </div>
+    <div style="vertical-align:middle;display:inline;margin: 0 0 0 10px;">
+        <mat-icon class="pointer" (click)="downloadFile()" title="Télécharger">
+        download
+        </mat-icon>
+    </div>
+</div>
 
 <div *ngIf="link">
     <h3 style="text-align: center;">{{ actualContent }}</h3>
