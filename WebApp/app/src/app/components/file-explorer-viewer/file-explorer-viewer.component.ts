@@ -178,25 +178,24 @@ export class FileExplorerViewerComponent implements OnInit {
 
   getAllContentByRepo(repo: string) {
     this.loaderService.setSpinnerState(true);
-    this.streamService.getAllContent(repo).subscribe(res => {
+    const cb = (res) => {
       this.contentList = res.list;
       this.contentListDataChange.emit(this.contentList);
       this.setCurrentFolder(res.path);
       this.setLocaleStorage('FOLDER');
       this.loaderService.setSpinnerState(false);
+    }
+    this.streamService.getAllContent(repo).subscribe(res => {
+      cb(res);
     },
       err => {
-        console.log('Error from APIs, reset by', this.initRepo, err);
+        console.log('Error from APIs, reset for ', this.initRepo, err);
         this.streamService.getAllContent(this.initRepo).subscribe(res => {
-          this.contentList = res.list;
-          this.contentListDataChange.emit(this.contentList);
-          this.setCurrentFolder(res.path);
-          this.setLocaleStorage('FOLDER');
-          this.loaderService.setSpinnerState(false);
+          cb(res);
         },
           err => {
             this.loaderService.setSpinnerState(false);
-            console.log('Error from API', err)
+            console.log('Error from API ', err)
           }
         );
       });
@@ -236,8 +235,7 @@ export class FileExplorerViewerComponent implements OnInit {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce dossier ?')) {
       this.uploadService.deleteFolder(this.currentFolder).subscribe(res => {
         if(res.folderDeleted) {
-          this.loaderService.setSpinnerState(false);
-          this.getAllContentByRepo(this.currentFolder.match(this.regexFolder)[0].slice(0, -1));
+          this.historyBack();
         }
       }, err => {
         this.loaderService.setSpinnerState(false);

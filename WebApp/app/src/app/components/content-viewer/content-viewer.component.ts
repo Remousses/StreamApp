@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { StreamService } from 'src/app/services/stream/stream.service';
 import { LoaderService } from 'src/app/services/loader/loader.service';
 import { UploadService } from 'src/app/services/upload/upload.service';
+import { DownloadService } from 'src/app/services/download/download.service';
 
 @Component({
   selector: 'app-content-viewer',
@@ -25,7 +26,8 @@ export class ContentViewerComponent implements OnInit {
   constructor(public domSanitizer: DomSanitizer,
               private streamService: StreamService,
               private loaderService: LoaderService,
-              private uploadService: UploadService) { }
+              private uploadService: UploadService,
+              private download: DownloadService) { }
 
   ngOnInit() {
     this.getDataFromLocalStorage();
@@ -76,6 +78,14 @@ export class ContentViewerComponent implements OnInit {
   }
 
   downloadFile(): void {
-    
+    this.download.download(this.actualContent, this.currentFolder)
+      .subscribe(blob => {
+        const a = document.createElement('a')
+        const objectUrl = URL.createObjectURL(blob)
+        a.href = objectUrl
+        a.download = this.actualContent;
+        a.click();
+        URL.revokeObjectURL(objectUrl);
+      })
   }
 }

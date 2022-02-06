@@ -7,6 +7,7 @@ const fs = require('fs'),
     bodyParser = require("body-parser");;
 
 const upload = require('./routes/uploads'),
+    download = require('./routes/downloads'),
     video = require('./routes/videos'),
     base64 = require('./routes/base64'),
     audio = require('./routes/audios'),
@@ -18,6 +19,8 @@ app.use(bodyParser.json());
 app.use(cors());
 
 app.use("", upload);
+
+app.use("", download);
 
 app.use("", video);
 
