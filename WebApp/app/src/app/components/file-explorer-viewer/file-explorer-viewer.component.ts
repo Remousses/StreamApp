@@ -140,6 +140,7 @@ export class FileExplorerViewerComponent implements OnInit {
     this.setBase64Data('', '', '', false);
     
     switch (name.split('.')[1]) {
+      case AllowedExtension.WEBP:
       case AllowedExtension.IMAGE.JPG:
       case AllowedExtension.IMAGE.JPEG:
       case AllowedExtension.IMAGE.PNG:
@@ -169,6 +170,12 @@ export class FileExplorerViewerComponent implements OnInit {
         this.currentContent = name;
         this.setLocaleStorage('CONTENT', this.link);
         break;
+
+      // case AllowedExtension.WEBP:
+      //   this.link = environment.searchVideoUrl + '?name=' + name + '&path=' + repo;
+      //   this.currentContent = name;
+      //   this.setLocaleStorage('CONTENT', this.link);
+      //   break;
 
       default:
         this.getAllContentByRepo(repo);

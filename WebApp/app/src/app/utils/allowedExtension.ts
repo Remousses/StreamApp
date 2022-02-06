@@ -10,5 +10,6 @@ export const AllowedExtension = {
         XLSX: 'xlsx'
     },
     MP3: 'mp3',
-    MP4: 'mp4'
+    MP4: 'mp4',
+    WEBP: 'webp'
 }
