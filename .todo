@@ -2,7 +2,6 @@ Delete:
     ☐ Boutton de suppresion dans file explorer pour supprimer des dossiers / fichiers est non juste le dossier actuel
 
 Download:
-    ☐ Pouvoir télécharger les fichiers séparément
     ☐ Pouvoir télécharger les dossiers
 
 File explorer:
@@ -25,8 +24,8 @@ CI/CD:
 VPN:
     ☐ Mise en place d'un VPN pour accèder au site à l'extérieur
 
-
 Archive:
+  ✔ Pouvoir télécharger les fichiers séparément @done(22-02-06 02:15) @project(Download)
   ✔ Suppression des fichiers audios et vidéos @done(21-03-20 18:13) @project(Delete)
   ✔ Suppression des images @done(20-02-17 22:50) @project(Delete)
   ✔ Refresh content-viewer après delete @done(21-03-28 00:21) @project(Delete)
