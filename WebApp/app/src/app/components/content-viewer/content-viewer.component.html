@@ -1,4 +1,4 @@
-<div *ngIf="actualContent">
+<div *ngIf="currentContent">
     <div style="display:inline;">
         <button mat-raised-button color="primary" style="margin-top: 10px" (click)="deleteFile()">Supprimer ce fichier</button>
     </div>
@@ -10,7 +10,7 @@
 </div>
 
 <div *ngIf="link">
-    <h3 style="text-align: center;">{{ actualContent }}</h3>
+    <h3 style="text-align: center;">{{ currentContent }}</h3>
 
     <div fxLayout="row">
         <div class="card" *ngIf="link.includes('mp4')">
@@ -31,7 +31,7 @@
         <mat-icon *ngIf="dataLeft" (click)="getNextData(dataLeft, encodedJSON.type)">keyboard_arrow_left</mat-icon>
     </div>
     <div class="container-image" fxLayout="column">
-        <h3 style="text-align: center;">{{ actualContent }}</h3>
+        <h3 style="text-align: center;">{{ currentContent }}</h3>
         <div fxLayout="row">
             <div class="card" [ngSwitch]="encodedJSON.type">
                 <img *ngSwitchCase="'image'" height="700px" [src]="encodedJSON.base64" (click)="getNextData(dataRight, encodedJSON.type)">

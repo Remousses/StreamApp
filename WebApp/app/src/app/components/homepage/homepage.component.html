@@ -15,7 +15,7 @@
 
 <app-content-viewer #contentViewer [link]="fileExplorerViewer.link" [encodedJSON]="encodedJSON"
   [currentFolder]="fileExplorerViewer.currentFolder" [dataLeft]="dataLeft" [dataRight]="dataRight"
-  (encodedJSONDataChange)="changeEncodedJSON($event)" [actualContent]="fileExplorerViewer.actualContent"
+  (encodedJSONDataChange)="changeEncodedJSON($event)" [currentContent]="fileExplorerViewer.currentContent"
   (refreshFileExplorerView)="fileExplorerViewer.getAllContentByRepo(fileExplorerViewer.currentFolder)"
   (retrieveDataFromLocalStorage)=fileExplorerViewer.getContent($event)></app-content-viewer>
 

@@ -17,7 +17,7 @@ export class ContentViewerComponent implements OnInit {
   @Input() currentFolder;
   @Input() dataLeft;
   @Input() dataRight;
-  @Input() actualContent;
+  @Input() currentContent;
 
   @Output() encodedJSONDataChange: EventEmitter<string> = new EventEmitter<string>();
   @Output() refreshFileExplorerView: EventEmitter<string> = new EventEmitter<string>();
@@ -34,7 +34,7 @@ export class ContentViewerComponent implements OnInit {
   }
 
   private getDataFromLocalStorage(){
-    const content = JSON.parse(localStorage.getItem('actualContent'));
+    const content = JSON.parse(localStorage.getItem('currentContent'));
     const repo = localStorage.getItem('currentFolder');
     
     if (content) {
@@ -47,7 +47,7 @@ export class ContentViewerComponent implements OnInit {
 
     if (dataSelected) {
       this.streamService.getBase64Data(this.currentFolder + '/' + dataSelected, type).subscribe(res => {
-        this.actualContent = dataSelected;
+        this.currentContent = dataSelected;
         this.loaderService.setSpinnerState(false);
         this.refreshContentView(type, dataSelected, res.data, true);
       }, err => {
@@ -59,12 +59,12 @@ export class ContentViewerComponent implements OnInit {
 
   deleteFile(): void {
     if (confirm('Êtes-vous sûr de vouloir supprimer ce fichier ?')) {
-      this.uploadService.deleteFile(this.currentFolder, this.actualContent).subscribe(res => {
+      this.uploadService.deleteFile(this.currentFolder, this.currentContent).subscribe(res => {
         this.loaderService.setSpinnerState(false);
-        this.actualContent = '';
+        this.currentContent = '';
         this.refreshContentView('', '', '', false);
         this.refreshFileExplorerView.emit();
-        localStorage.removeItem('actualContent');
+        localStorage.removeItem('currentContent');
       }, err => {
         this.loaderService.setSpinnerState(false);
         console.log('Error from API', err);
@@ -78,12 +78,12 @@ export class ContentViewerComponent implements OnInit {
   }
 
   downloadFile(): void {
-    this.download.download(this.actualContent, this.currentFolder)
+    this.download.download(this.currentContent, this.currentFolder)
       .subscribe(blob => {
         const a = document.createElement('a')
         const objectUrl = URL.createObjectURL(blob)
         a.href = objectUrl
-        a.download = this.actualContent;
+        a.download = this.currentContent;
         a.click();
         URL.revokeObjectURL(objectUrl);
       })

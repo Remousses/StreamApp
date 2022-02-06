@@ -24,7 +24,7 @@ export class FileExplorerViewerComponent implements OnInit {
   private regexFolder = /(.*[\\\/])/;
   link: string = '';
   currentFolder: string = '';
-  actualContent: string = '';
+  currentContent: string = '';
   initRepo: string = common.initRepo;
 
   @Input() encodedJSON;
@@ -135,7 +135,7 @@ export class FileExplorerViewerComponent implements OnInit {
       repo = splitContent.join('/');
     }
 
-    this.actualContent = '';
+    this.currentContent = '';
     this.link = '';
     this.setBase64Data('', '', '', false);
     
@@ -145,7 +145,7 @@ export class FileExplorerViewerComponent implements OnInit {
       case AllowedExtension.IMAGE.PNG:
         this.getBase64Data(repo, 'image').then(res => {
           this.setBase64Data(name, res.data, 'image', true);
-          this.actualContent = name;
+          this.currentContent = name;
           this.setLocaleStorage('CONTENT', res.data);
         }).catch(err => console.log('Error from APIs', err));
         break;
@@ -153,20 +153,20 @@ export class FileExplorerViewerComponent implements OnInit {
       case AllowedExtension.PDF:
         this.getBase64Data(repo, 'pdf').then(res => {
           this.setBase64Data(name, res.data, 'pdf', true);
-          this.actualContent = name;
+          this.currentContent = name;
           this.setLocaleStorage('CONTENT', res.data);
         }).catch(err => console.log('Error from APIs', err));
         break;
 
       case AllowedExtension.MP3:
         this.link = environment.searchAudioUrl + '?name=' + name + '&path=' + repo;
-        this.actualContent = name;
+        this.currentContent = name;
         this.setLocaleStorage('CONTENT', this.link);
         break;
 
       case AllowedExtension.MP4:
         this.link = environment.searchVideoUrl + '?name=' + name + '&path=' + repo;
-        this.actualContent = name;
+        this.currentContent = name;
         this.setLocaleStorage('CONTENT', this.link);
         break;
 
@@ -217,13 +217,13 @@ export class FileExplorerViewerComponent implements OnInit {
         break;
       case 'CONTENT':
         const jsonContent = JSON.stringify({
-          name: this.actualContent, data
+          name: this.currentContent, data
         });
-        if (!localStorage.getItem('actualContent')) {
-          localStorage.setItem('actualContent', jsonContent);
+        if (!localStorage.getItem('currentContent')) {
+          localStorage.setItem('currentContent', jsonContent);
         } else {
-          localStorage.setItem('actualContent', jsonContent);
-          this.actualContent = JSON.parse(localStorage.getItem('actualContent')).name;
+          localStorage.setItem('currentContent', jsonContent);
+          this.currentContent = JSON.parse(localStorage.getItem('currentContent')).name;
         }
         break;
       default:
